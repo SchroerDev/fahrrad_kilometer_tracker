@@ -14,7 +14,7 @@
       <h2>Deine Fahrten</h2>
       <ul v-if="rides.length > 0">
         <li v-for="ride in rides" :key="ride.id">
-          {{ ride.date }}: {{ ride.kilometers }} km
+          {{ formatDate(ride.created_at) }}: {{ ride.km }} km
         </li>
       </ul>
       <p v-else>Keine Fahrten gefunden.</p>
@@ -75,12 +75,22 @@ const fetchProfile = async () => {
 
     // Fahrten laden
     const { data: ridesData } = await supabase
-        .from('rides')
-        .select('id, date, kilometers')
-        .eq('user_id', user.id)
-        .order('date', { ascending: false })
+      .from('rides')
+      .select('id, created_at, km')
+      .eq('user_id', user.id)
+      .order('created_at', { ascending: false })
 
     rides.value = ridesData || []
+}
+
+function formatDate(dateString) {
+  const date = new Date(dateString)
+  const day = String(date.getDate()).padStart(2, '0')
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const year = date.getFullYear()
+  const hours = String(date.getHours()).padStart(2, '0')
+  const minutes = String(date.getMinutes()).padStart(2, '0')
+  return `${day}.${month}.${year} ${hours}:${minutes}`
 }
 
 onMounted(fetchProfile)
@@ -90,6 +100,14 @@ onMounted(fetchProfile)
 .profile-page {
   max-width: 500px;
   margin: 2rem auto;
+}
+ul {
+  padding-left: 0;
+  list-style-position: inside;
+  text-align: left;
+}
+li {
+  margin-bottom: 0.5rem;
 }
 .error {
   color: red;

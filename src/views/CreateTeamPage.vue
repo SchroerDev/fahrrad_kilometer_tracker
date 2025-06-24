@@ -19,18 +19,28 @@ const teamName = ref('')
 const error = ref(null)
 
 async function createTeam() {
-    const user = await supabase.auth.getUser()
-    const userId = user.data.user.id
-
-    const { data, error: insertError } = await supabase
+    const { data: { user } } = await supabase.auth.getUser()
+    const { data: teamData, error: teamError } = await supabase
         .from('teams')
-        .insert([{ name: teamName.value, created_by: userId }])
+        .insert([{ name: teamName.value }])
+        .select()
+        .single()
 
-    if (insertError) {
-        error.value = insertError.message
-    } else {
-        router.push('/teams')
+    if (teamError) {
+        error.value = teamError.message
+        return
     }
+
+    const { error: memberError } = await supabase
+        .from('members')
+        .insert([{ user_id: user.id, team_id: teamData.id }])
+
+    if (memberError) {
+        error.value = memberError.message
+        return
+    }
+
+    router.push('/teams')
 }
 </script>
 
@@ -59,4 +69,4 @@ button {
     margin-top: 1rem;
 }
 </style>
-  
+
