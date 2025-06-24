@@ -1,6 +1,7 @@
 <template>
   <div class="my-team-page">
-    <h1><strong>Dein Team:</strong> <span class="team-name">{{ team.name }}</span></h1>
+    <h1 v-if="team"><strong>Dein Team:</strong> <span class="team-name">{{ team.name }}</span></h1>
+    <h1 v-else>Mein Team</h1>
     <div v-if="loading">Lade Teamdaten...</div>
     <div v-else-if="!team">
       <p>Du bist in keinem Team.</p>
