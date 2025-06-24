@@ -9,6 +9,8 @@
     <div v-else>
       <h2>{{ team.name }}</h2>
       <h3>Mitglieder</h3>
+      <p v-if="memberListError" class="error">{{ memberListError }}</p>
+      <pre v-if="memberRequestBody" class="info">{{ memberRequestBody }}</pre>
       <ul>
         <li v-for="member in members" :key="member.id">
           {{ member.username || member.email }}
@@ -39,11 +41,12 @@ const router = useRouter()
 const loading = ref(true)
 const team = ref(null)
 const members = ref([])
+const memberListError = ref('')
+const memberRequestBody = ref('') // als String für die Anzeige
 const inviteEmail = ref('')
 const inviteSuccess = ref(false)
 const inviteError = ref('')
 const inviteLink = ref('')
-const debugBody = ref('') // Debug-Ausgabe
 
 async function fetchMyTeam() {
   loading.value = true
@@ -70,16 +73,19 @@ async function fetchMyTeam() {
     .single()
   team.value = teamData
 
+  // memberRequestBody als String für die Anzeige setzen
+  memberRequestBody.value = JSON.stringify({ teamId: teamData.id }, null, 2)
+
   // Hole Mitglieder über Supabase Function
-  const { data, error } = await supabase.functions.invoke('get-team-members', {
+  const { data, error } = await supabase.functions.invoke('Get-team-Members', {
     body: { teamId: teamData.id }
   })
   if (error) {
     members.value = []
-    inviteError.value = `Fehler beim Laden der Mitglieder: ${error.message || error}`
+    memberListError.value = `Fehler beim Laden der Mitglieder: ${error.message || error}`
   } else {
     members.value = data.members
-    inviteError.value = ''
+    memberListError.value = ''
   }
 
   // Einladung-Link generieren
