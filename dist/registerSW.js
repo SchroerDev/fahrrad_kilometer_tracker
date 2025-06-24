@@ -1,0 +1,1 @@
+if('serviceWorker' in navigator) {window.addEventListener('load', () => {navigator.serviceWorker.register('/fahrrad_kilometer_tracker/sw.js', { scope: '/fahrrad_kilometer_tracker/' })})}
