@@ -6,6 +6,9 @@ import { VitePWA } from 'vite-plugin-pwa'
 
 export default defineConfig({
   base: '/fahrrad_kilometer_tracker/', // <- wichtig für GitHub Pages!
+  build: {
+    outDir: 'docs' // <-- Output-Ordner für GitHub Pages auf /docs setzen
+  },
   plugins: [
     vue(),
     VitePWA({
