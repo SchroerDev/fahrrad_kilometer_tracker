@@ -215,11 +215,99 @@ button:focus-visible {
   font-size: 1em;
 }
 
+/* Teams-Tabelle */
+.teams-table {
+  width: 100%;
+  min-width: 600px;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin-bottom: 2rem;
+  background: #23272f;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px 0 rgba(0,0,0,0.08);
+  table-layout: auto;
+}
+
+.teams-table th,
+.teams-table td {
+  padding: 0.85em 1.2em;
+  text-align: left;
+  border-right: 1px solid #2d323c;
+  border-bottom: 1px solid #2d323c;
+  vertical-align: middle;
+  word-break: break-word;
+}
+
+.teams-table th:last-child,
+.teams-table td:last-child {
+  border-right: none;
+}
+
+.teams-table th {
+  background: #2d323c;
+  color: var(--primary);
+  font-weight: 600;
+  border-top: 2px solid #2c7a5a;
+  border-bottom: 2px solid #2c7a5a;
+  font-size: 1.08em;
+}
+
+.teams-table tr {
+  transition: background 0.2s;
+}
+
+.teams-table tr:hover {
+  background: #28303a;
+}
+
+.teams-table td {
+  color: #fff;
+  font-size: 1em;
+  background: #23272f;
+}
+
+@media (max-width: 800px) {
+  .teams-table, .teams-table thead, .teams-table tbody, .teams-table th, .teams-table td, .teams-table tr {
+    display: block;
+    width: 100%;
+    min-width: unset;
+  }
+  .teams-table th, .teams-table td {
+    border-right: none;
+    border-bottom: 1px solid #2d323c;
+    padding: 0.7em 0.7em;
+  }
+}
+
 /* Optional: Button für Einladen */
 .invite-btn {
   margin-top: 1rem;
 }
 
+
+.coords-row {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.coord-input {
+  width: 120px;
+  font-size: 0.95em;
+  padding: 0.3em 0.5em;
+  background: #23272f;
+  color: #ccc;
+  border: 1px solid #2d323c;
+  border-radius: 6px;
+}
+
+.coord-input[readonly] {
+  background: #23272f;
+  color: #aaa;
+  opacity: 1;
+}
 /* Ride Map */
 .ride-map {
   width: 100%;
@@ -227,7 +315,7 @@ button:focus-visible {
   margin-bottom: 1.5rem;
   border-radius: 8px;
   overflow: hidden;
-  border: 1px solid #ccc;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.08);
 }
 
 .register-hint {

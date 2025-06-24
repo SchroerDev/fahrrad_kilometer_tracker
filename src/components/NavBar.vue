@@ -148,7 +148,7 @@ function closeMenu() {
     display: flex;
     align-items: center;
     gap: 1rem;
-    margin-right: 3rem;
+    margin-right: 4rem;
 }
 
 button {

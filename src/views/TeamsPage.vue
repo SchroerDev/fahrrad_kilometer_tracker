@@ -4,21 +4,36 @@
 
         <div v-if="loading">Lade Teams...</div>
         <div v-else-if="teams.length === 0">Keine Teams gefunden.</div>
-        <ul v-else>
-            <li v-for="team in teams" :key="team.id">
-                <template v-if="team.id === myTeamId">
-                    <router-link :to="'/my-team'" class="my-team-link">
-                        <strong>{{ team.name }}</strong>
-                    </router-link>
-                    – {{ team.total_km ?? 0 }} km
-                    <span class="badge">Mein Team</span>
-                </template>
-                <template v-else>
-                    <strong>{{ team.name }}</strong>
-                    – {{ team.total_km ?? 0 }} km
-                </template>
-            </li>
-        </ul>
+        <table v-else class="teams-table">
+            <thead>
+                <tr>
+                    <th>Rang</th>
+                    <th>Teamname</th>
+                    <th>Kilometer</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(team, idx) in sortedTeams" :key="team.id">
+                    <td>{{ idx + 1 }}</td>
+                    <td>
+                        <template v-if="team.id === myTeamId">
+                            <router-link :to="'/my-team'" class="my-team-link">
+                                <strong>{{ team.name }}</strong>
+                            </router-link>
+                            <span class="badge">Mein Team</span>
+                        </template>
+                        <template v-else>
+                            <strong>{{ team.name }}</strong>
+                        </template>
+                    </td>
+                    <td>{{ team.total_km ?? 0 }}</td>
+                    <td>
+                        <!-- Optional: weitere Aktionen -->
+                    </td>
+                </tr>
+            </tbody>
+        </table>
 
         <div v-if="!myTeamId">
             <button @click="goToCreateTeam">➕ Team erstellen</button>
@@ -30,7 +45,7 @@
 
 <script setup>
 import '../style.css'
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { supabase } from '../supabaseClient'
 
@@ -104,6 +119,10 @@ async function fetchMyTeamId() {
 function goToCreateTeam() {
     router.push('/create-team')
 }
+
+const sortedTeams = computed(() => {
+    return [...teams.value].sort((a, b) => (b.total_km ?? 0) - (a.total_km ?? 0))
+})
 
 onMounted(() => {
     fetchTeams()

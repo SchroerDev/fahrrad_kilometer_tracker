@@ -3,18 +3,41 @@
     <h1>Neue Fahrt eintragen</h1>
     <div ref="mapContainer" class="ride-map"></div>
     <form @submit.prevent="submitRide">
-      <label>
-        Startpunkt (Latitude):
-        <input type="number" v-model="lat" step="any" required />
-      </label>
-      <label>
-        Startpunkt (Longitude):
-        <input type="number" v-model="lng" step="any" required />
-      </label>
-      <label>
-        Kilometer:
-        <input type="number" v-model="km" min="0" step="0.1" required />
-      </label>
+      <div class="coords-row">
+        <label>
+          Startpunkt (Latitude):
+          <input
+            type="number"
+            v-model="lat"
+            step="any"
+            readonly
+            class="coord-input"
+          />
+        </label>
+        <label>
+          Startpunkt (Longitude):
+          <input
+            type="number"
+            v-model="lng"
+            step="any"
+            readonly
+            class="coord-input"
+          />
+        </label>
+      </div>
+      <div class="km-row">
+        <label>
+          Kilometer:
+          <input
+            type="number"
+            v-model="km"
+            min="0"
+            step="1"
+            required
+            class="coord-input"
+          />
+        </label>
+      </div>
       <button type="submit">Speichern</button>
     </form>
     <p v-if="error" class="error">{{ error }}</p>
@@ -70,10 +93,14 @@ const submitRide = async () => {
     error.value = 'Bitte wähle einen Startpunkt auf der Karte.'
     return
   }
+  if (!km.value || parseInt(km.value, 10) <= 1) {
+    error.value = 'Bitte gib mindestens 2 Kilometer ein.'
+    return
+  }
   const startPoint = `SRID=4326;POINT(${lng.value} ${lat.value})`
   const { error: insertError } = await supabase.from('rides').insert([{
     user_id: user.id,
-    km: parseFloat(km.value),
+    km: parseInt(km.value, 10),
     StartPoint: startPoint
   }])
   if (insertError) {
@@ -91,41 +118,5 @@ const submitRide = async () => {
 }
 </script>
 
-<style scoped>
-.new-ride-page {
-  max-width: 400px;
-  margin: 2rem auto;
-}
-.ride-map {
-  width: 100%;
-  height: 300px;
-  margin-bottom: 1.5rem;
-  border-radius: 8px;
-  overflow: hidden;
-  border: 1px solid #ccc;
-}
-label {
-  display: block;
-  margin-bottom: 1rem;
-}
-input {
-  width: 100%;
-  padding: 0.5rem;
-  margin-top: 0.25rem;
-}
-button {
-  padding: 0.5rem 1rem;
-  background-color: #42b883;
-  color: white;
-  border: none;
-  border-radius: 4px;
-}
-.error {
-  color: red;
-  margin-top: 1rem;
-}
-.success {
-  color: green;
-  margin-top: 1rem;
-}
-</style>
+
+

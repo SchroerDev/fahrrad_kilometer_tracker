@@ -9,8 +9,20 @@
       <div v-if="!emailConfirmed" class="warning">
         Bitte bestätige deine E-Mail-Adresse, um alle Funktionen nutzen zu können.
       </div>
-      <p><strong>Benutzername:</strong> {{ profile.username }}</p>
-      <p><strong>Team:</strong> {{ teamName }}</p>
+      <p>
+        <strong>Benutzername:</strong> {{ profile.username }}
+      </p>
+      <p>
+        <strong>Team:</strong> {{ teamName }}
+        <button 
+          v-if="teamName !== 'Kein Team'" 
+          @click="leaveTeam" 
+          class="leave-team-btn"
+          style="margin-left:1em;"
+        >
+          Team verlassen
+        </button>
+      </p>
       <h2>Deine Fahrten</h2>
       <ul v-if="rides.length > 0">
         <li v-for="ride in rides" :key="ride.id">
@@ -32,6 +44,7 @@ const teamName = ref('Kein Team')
 const error = ref(null)
 const rides = ref([])
 const emailConfirmed = ref(true)
+const memberId = ref(null)
 
 const fetchProfile = async () => {
     const { data: { user }, error: userError } = await supabase.auth.getUser()
@@ -62,16 +75,24 @@ const fetchProfile = async () => {
         .eq('user_id', user.id)
         .single()
 
-    if (memberData?.team_id) {
+        
+
+    if (memberData && memberData.team_id) {
+        memberId.value = memberData.id
         const { data: teamData } = await supabase
             .from('teams')
             .select('name')
             .eq('id', memberData.team_id)
             .single()
 
-        if (teamData?.name) {
+        if (teamData && teamData.name) {
             teamName.value = teamData.name
+        } else {
+            teamName.value = 'Kein Team'
         }
+    } else {
+        memberId.value = null
+        teamName.value = 'Kein Team'
     }
 
     // Fahrten laden
@@ -82,6 +103,20 @@ const fetchProfile = async () => {
       .order('created_at', { ascending: false })
 
     rides.value = ridesData || []
+}
+
+async function leaveTeam() {
+  if (!memberId.value) return
+  const { error: leaveError } = await supabase
+    .from('members')
+    .delete()
+    .eq('id', memberId.value)
+  if (leaveError) {
+    error.value = 'Fehler beim Verlassen des Teams: ' + leaveError.message
+  } else {
+    teamName.value = 'Kein Team'
+    memberId.value = null
+  }
 }
 
 function formatDate(dateString) {
