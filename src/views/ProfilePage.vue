@@ -1,3 +1,27 @@
+<template>
+  <div class="profile-page">
+    <h1>👤 Profil</h1>
+    <div v-if="error" class="error">{{ error }}</div>
+    <div v-else-if="!profile">
+      Lade Profil...
+    </div>
+    <div v-else>
+      <div v-if="!emailConfirmed" class="warning">
+        Bitte bestätige deine E-Mail-Adresse, um alle Funktionen nutzen zu können.
+      </div>
+      <p><strong>Benutzername:</strong> {{ profile.username }}</p>
+      <p><strong>Team:</strong> {{ teamName }}</p>
+      <h2>Deine Fahrten</h2>
+      <ul v-if="rides.length > 0">
+        <li v-for="ride in rides" :key="ride.id">
+          {{ ride.date }}: {{ ride.kilometers }} km
+        </li>
+      </ul>
+      <p v-else>Keine Fahrten gefunden.</p>
+    </div>
+  </div>
+</template>
+
 <script setup>
 import { ref, onMounted } from 'vue'
 import { supabase } from '../supabaseClient'
@@ -5,6 +29,8 @@ import { supabase } from '../supabaseClient'
 const profile = ref(null)
 const teamName = ref('Kein Team')
 const error = ref(null)
+const rides = ref([])
+const emailConfirmed = ref(true)
 
 const fetchProfile = async () => {
     const { data: { user }, error: userError } = await supabase.auth.getUser()
@@ -12,6 +38,9 @@ const fetchProfile = async () => {
         error.value = 'Nicht eingeloggt.'
         return
     }
+
+    // Prüfen, ob E-Mail bestätigt ist
+    emailConfirmed.value = user.email_confirmed_at !== null
 
     const { data: profileData, error: profileError } = await supabase
         .from('profiles')
@@ -43,7 +72,32 @@ const fetchProfile = async () => {
             teamName.value = teamData.name
         }
     }
+
+    // Fahrten laden
+    const { data: ridesData } = await supabase
+        .from('rides')
+        .select('id, date, kilometers')
+        .eq('user_id', user.id)
+        .order('date', { ascending: false })
+
+    rides.value = ridesData || []
 }
 
 onMounted(fetchProfile)
 </script>
+
+<style scoped>
+.profile-page {
+  max-width: 500px;
+  margin: 2rem auto;
+}
+.error {
+  color: red;
+  margin-bottom: 1rem;
+}
+.warning {
+  color: orange;
+  margin-bottom: 1rem;
+  font-weight: bold;
+}
+</style>

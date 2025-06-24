@@ -37,7 +37,11 @@ async function register() {
     // Benutzerprofil speichern
     const userId = data.user?.id
     if (userId) {
-        await supabase.from('profiles').insert([{ id: userId, username: username.value }])
+        const { error: profileError } = await supabase.from('profiles').update({ username: username.value }).eq('id', userId)
+        if (profileError) {
+            error.value = profileError.message
+            return
+        }
     }
 
     router.push('/teams')
@@ -71,4 +75,4 @@ button {
     margin-top: 1rem;
 }
 </style>
-  
+

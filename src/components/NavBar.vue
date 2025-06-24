@@ -5,6 +5,7 @@
         </div>
         <div class="nav-right">
             <router-link to="/teams">Teams</router-link>
+            <router-link to="/rides/new">Fahrt eintragen</router-link>
             <router-link to="/profile">Profil</router-link>
             <button @click="logout">Logout</button>
         </div>
@@ -37,6 +38,10 @@ const logout = async () => {
     padding: 1rem 2rem;
     color: white;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.nav-left {
+    margin-right: 2rem; /* Abstand zur rechten Seite */
 }
 
 .nav-left .logo {
@@ -76,4 +81,4 @@ button:hover {
     background-color: #e6f4f1;
 }
 </style>
-  
+

@@ -6,6 +6,7 @@ import CreateTeamPage from '../views/CreateTeamPage.vue'
 import HomePage from '../views/HomePage.vue'
 import RegisterPage from '../views/RegisterPage.vue'
 import ProfilePage from '../views/ProfilePage.vue'
+import NewRidePage from '../views/NewRidePage.vue'
 
 
 const routes = [
@@ -14,7 +15,8 @@ const routes = [
     { path: '/register', component: RegisterPage },
     { path: '/teams', component: TeamsPage },
     { path: '/create-team', component: CreateTeamPage },
-    { path: '/profile', component: ProfilePage }    
+    { path: '/profile', component: ProfilePage },
+    { path: '/rides/new', component: NewRidePage }
 ]
 
 const router = createRouter({
