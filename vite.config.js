@@ -5,6 +5,7 @@ import { VitePWA } from 'vite-plugin-pwa'
 
 
 export default defineConfig({
+  base: '/fahrrad_kilometer_tracker/', // <- wichtig für GitHub Pages!
   plugins: [
     vue(),
     VitePWA({
@@ -34,4 +35,3 @@ export default defineConfig({
     })
   ]
 })
-  

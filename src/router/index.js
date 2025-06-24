@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 
 import LoginPage from '../views/LoginPage.vue'
 import TeamsPage from '../views/TeamsPage.vue'
@@ -7,7 +7,7 @@ import HomePage from '../views/HomePage.vue'
 import RegisterPage from '../views/RegisterPage.vue'
 import ProfilePage from '../views/ProfilePage.vue'
 import NewRidePage from '../views/NewRidePage.vue'
-
+import MyTeamPage from '../views/MyTeamPage.vue'
 
 const routes = [
     { path: '/', component: HomePage },
@@ -16,11 +16,13 @@ const routes = [
     { path: '/teams', component: TeamsPage },
     { path: '/create-team', component: CreateTeamPage },
     { path: '/profile', component: ProfilePage },
-    { path: '/rides/new', component: NewRidePage }
+    { path: '/rides/new', component: NewRidePage },
+    { path: '/my-team', component: MyTeamPage },
+    { path: '/join-team/:teamId', component: () => import('../views/JoinTeamPage.vue') }
 ]
 
 const router = createRouter({
-    history: createWebHistory(),
+    history: createWebHashHistory(),
     routes
 })
 

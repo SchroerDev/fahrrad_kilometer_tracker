@@ -7,6 +7,7 @@
         <ul v-else>
             <li v-for="team in teams" :key="team.id">
                 <strong>{{ team.name }}</strong>
+                – {{ team.total_km ?? 0 }} km
             </li>
         </ul>
 
@@ -31,17 +32,48 @@ const hasTeam = ref(false)
 
 async function fetchTeams() {
     loading.value = true
+    // Teams mit Mitgliedern abfragen
     const { data, error: fetchError } = await supabase
         .from('teams')
-        .select('*')
+        .select(`
+            id,
+            name,
+            members:members (
+                user_id
+            )
+        `)
         .order('created_at', { ascending: false })
 
     if (fetchError) {
         error.value = fetchError.message
-    } else {
-        teams.value = data
+        loading.value = false
+        return
     }
 
+    // Für jedes Team die km summieren
+    const teamsWithKm = []
+    for (const team of data) {
+        let total = 0
+        if (team.members && team.members.length > 0) {
+            // Hole alle Fahrten der Teammitglieder
+            const userIds = team.members.map(m => m.user_id)
+            const { data: rides } = await supabase
+                .from('rides')
+                .select('km')
+                .in('user_id', userIds)
+            if (rides) {
+                for (const ride of rides) {
+                    total += Number(ride.km) || 0
+                }
+            }
+        }
+        teamsWithKm.push({
+            id: team.id,
+            name: team.name,
+            total_km: total
+        })
+    }
+    teams.value = teamsWithKm
     loading.value = false
 }
 
@@ -78,5 +110,17 @@ button {
     border: none;
     border-radius: 4px;
 }
+ul {
+    padding-left: 0;
+    list-style-position: inside;
+    text-align: left;
+}
+li {
+    margin-bottom: 0.5rem;
+}
+.error {
+    color: red;
+    margin-top: 1rem;
+}
 </style>
-  
+
