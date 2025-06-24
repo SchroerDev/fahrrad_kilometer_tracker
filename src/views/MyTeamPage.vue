@@ -43,6 +43,7 @@ const inviteEmail = ref('')
 const inviteSuccess = ref(false)
 const inviteError = ref('')
 const inviteLink = ref('')
+const debugBody = ref('') // Debug-Ausgabe
 
 async function fetchMyTeam() {
   loading.value = true
@@ -70,8 +71,8 @@ async function fetchMyTeam() {
   team.value = teamData
 
   // Hole Mitglieder über Supabase Function
-  const { data, error } = await supabase.functions.invoke('Get-team-Members', {
-    body: { name: 'Functions', teamId: teamData.id }
+  const { data, error } = await supabase.functions.invoke('get-team-members', {
+    body: { teamId: teamData.id }
   })
   if (error) {
     members.value = []
