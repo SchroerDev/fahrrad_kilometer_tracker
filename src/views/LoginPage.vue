@@ -50,15 +50,18 @@ input {
     width: 100%;
     margin-bottom: 1rem;
     padding: 0.5rem;
+    box-sizing: border-box; /* Hinzugefügt für exakte Breite */
 }
 
 button {
+    display: block;           /* Hinzugefügt */
     width: 100%;
     padding: 0.5rem;
     background-color: #2c3e50;
     color: white;
     border: none;
     border-radius: 4px;
+    box-sizing: border-box;   /* Hinzugefügt für exakte Breite */
 }
 
 .error {
