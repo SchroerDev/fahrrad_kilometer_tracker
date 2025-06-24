@@ -1,5 +1,5 @@
 <template>
-  <div class="my-team-page">
+  <div class="page-container">
     <h1 v-if="team"><strong>Dein Team:</strong> <span class="team-name">{{ team.name }}</span></h1>
     <h1 v-else>Mein Team</h1>
     <div v-if="loading">Lade Teamdaten...</div>
@@ -30,6 +30,7 @@
 </template>
 
 <script setup>
+import '../style.css'
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { supabase } from '../supabaseClient'
@@ -92,40 +93,5 @@ onMounted(fetchMyTeam)
 </script>
 
 <style scoped>
-.my-team-page {
-  max-width: 600px;
-  margin: 2rem auto;
-}
-.team-header {
-  margin-bottom: 1.5rem;
-  font-size: 1.2em;
-}
-.team-name {
-  color: #42b883;
-  font-weight: bold;
-  margin-left: 0.5em;
-}
-.members-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 1.5rem;
-}
-.members-table th,
-.members-table td {
-  border: 1px solid #ccc;
-  padding: 0.5em 1em;
-  text-align: left;
-}
-.invite-btn {
-  padding: 0.5rem 1rem;
-  background-color: #42b883;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-.error {
-  color: red;
-  margin-top: 1rem;
-}
+/* leer, alles in style.css */
 </style>

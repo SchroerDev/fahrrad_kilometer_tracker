@@ -1,5 +1,5 @@
 <template>
-  <div class="profile-page">
+  <div class="page-container">
     <h1>👤 Profil</h1>
     <div v-if="error" class="error">{{ error }}</div>
     <div v-else-if="!profile">
@@ -23,6 +23,7 @@
 </template>
 
 <script setup>
+import '../style.css'
 import { ref, onMounted } from 'vue'
 import { supabase } from '../supabaseClient'
 
@@ -95,27 +96,3 @@ function formatDate(dateString) {
 
 onMounted(fetchProfile)
 </script>
-
-<style scoped>
-.profile-page {
-  max-width: 500px;
-  margin: 2rem auto;
-}
-ul {
-  padding-left: 0;
-  list-style-position: inside;
-  text-align: left;
-}
-li {
-  margin-bottom: 0.5rem;
-}
-.error {
-  color: red;
-  margin-bottom: 1rem;
-}
-.warning {
-  color: orange;
-  margin-bottom: 1rem;
-  font-weight: bold;
-}
-</style>

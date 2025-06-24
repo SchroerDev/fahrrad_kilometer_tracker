@@ -1,5 +1,5 @@
 <template>
-  <div class="join-team-page">
+  <div class="page-container">
     <h1>Team beitreten</h1>
     <div v-if="loading">Beitritt wird geprüft...</div>
     <div v-else-if="success">
@@ -14,6 +14,7 @@
 </template>
 
 <script setup>
+import '../style.css'
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { supabase } from '../supabaseClient'
@@ -59,13 +60,3 @@ onMounted(async () => {
 })
 </script>
 
-<style scoped>
-.join-team-page {
-  max-width: 400px;
-  margin: 2rem auto;
-}
-.error {
-  color: red;
-  margin-top: 1rem;
-}
-</style>

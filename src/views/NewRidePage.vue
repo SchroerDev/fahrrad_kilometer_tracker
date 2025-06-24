@@ -1,5 +1,5 @@
 <template>
-  <div class="new-ride-page">
+  <div class="page-container">
     <h1>Neue Fahrt eintragen</h1>
     <div ref="mapContainer" class="ride-map"></div>
     <form @submit.prevent="submitRide">
@@ -23,6 +23,7 @@
 </template>
 
 <script setup>
+import '../style.css'
 import { ref, onMounted } from 'vue'
 import { supabase } from '../supabaseClient'
 import maplibregl from 'maplibre-gl'

@@ -1,6 +1,6 @@
 <template>
-    <div class="teams-page">
-        <h1>🚴 Team-Übersicht</h1>
+    <div class="page-container">
+        <h1 class="page-title">🚴 Team-Übersicht</h1>
 
         <div v-if="loading">Lade Teams...</div>
         <div v-else-if="teams.length === 0">Keine Teams gefunden.</div>
@@ -29,6 +29,7 @@
 </template>
 
 <script setup>
+import '../style.css'
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { supabase } from '../supabaseClient'
@@ -109,40 +110,3 @@ onMounted(() => {
     fetchMyTeamId()
 })
 </script>
-
-<style scoped>
-button {
-    margin-top: 1rem;
-    padding: 0.5rem 1rem;
-    background-color: #42b883;
-    color: white;
-    border: none;
-    border-radius: 4px;
-}
-ul {
-    padding-left: 0;
-    list-style-position: inside;
-    text-align: left;
-}
-li {
-    margin-bottom: 0.5rem;
-}
-.my-team-link {
-    color: #42b883;
-    text-decoration: underline;
-    font-weight: bold;
-}
-.badge {
-    background: #42b883;
-    color: #fff;
-    border-radius: 8px;
-    padding: 0.1em 0.6em;
-    font-size: 0.8em;
-    margin-left: 0.5em;
-}
-.error {
-    color: red;
-    margin-top: 1rem;
-}
-</style>
-

@@ -1,5 +1,5 @@
 <template>
-    <div class="register">
+    <div class="page-container">
         <h1>Registrieren</h1>
         <form @submit.prevent="register">
             <input v-model="email" type="email" placeholder="E-Mail" required />
@@ -12,6 +12,7 @@
 </template>
 
 <script setup>
+import '../style.css'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { supabase } from '../supabaseClient'
@@ -47,32 +48,4 @@ async function register() {
     router.push('/teams')
 }
 </script>
-
-<style scoped>
-.register {
-    max-width: 400px;
-    margin: 2rem auto;
-}
-
-input {
-    display: block;
-    width: 100%;
-    margin-bottom: 1rem;
-    padding: 0.5rem;
-}
-
-button {
-    width: 100%;
-    padding: 0.75rem;
-    background-color: #2c3e50;
-    color: white;
-    border: none;
-    border-radius: 4px;
-}
-
-.error {
-    color: red;
-    margin-top: 1rem;
-}
-</style>
 

@@ -1,5 +1,5 @@
 <template>
-    <div class="create-team">
+    <div class="page-container">
         <h1>➕ Neues Team erstellen</h1>
         <form @submit.prevent="createTeam">
             <input v-model="teamName" type="text" placeholder="Teamname" required />
@@ -10,6 +10,7 @@
 </template>
 
 <script setup>
+import '../style.css'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { supabase } from '../supabaseClient'
@@ -44,29 +45,4 @@ async function createTeam() {
 }
 </script>
 
-<style scoped>
-.create-team {
-    max-width: 400px;
-    margin: 2rem auto;
-}
-
-input {
-    width: 100%;
-    padding: 0.5rem;
-    margin-bottom: 1rem;
-}
-
-button {
-    padding: 0.5rem 1rem;
-    background-color: #2c3e50;
-    color: white;
-    border: none;
-    border-radius: 4px;
-}
-
-.error {
-    color: red;
-    margin-top: 1rem;
-}
-</style>
 
