@@ -1,14 +1,15 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-
+import HomePage from '../views/HomePage.vue'
 import LoginPage from '../views/LoginPage.vue'
 import TeamsPage from '../views/TeamsPage.vue'
 import CreateTeamPage from '../views/CreateTeamPage.vue'
-import HomePage from '../views/HomePage.vue'
 import RegisterPage from '../views/RegisterPage.vue'
 import ProfilePage from '../views/ProfilePage.vue'
 import NewRidePage from '../views/NewRidePage.vue'
 import MyTeamPage from '../views/MyTeamPage.vue'
-import InviteMemberPage from '../views/InviteMemberPage.vue'
+
+
+import { supabase } from '../supabaseClient'
 
 const routes = [
     { path: '/', component: HomePage },
@@ -26,6 +27,20 @@ const routes = [
 const router = createRouter({
     history: createWebHashHistory(),
     routes
+})
+
+// Navigation Guard für die Root-Seite
+router.beforeEach(async (to, from, next) => {
+    if (to.path === '/') {
+        const { data: { session } } = await supabase.auth.getSession()
+        if (session) {
+            next('/teams')
+        } else {
+            next('/login')
+        }
+    } else {
+        next()
+    }
 })
 
 export default router
