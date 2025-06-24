@@ -7,6 +7,10 @@
             <button type="submit">Anmelden</button>
         </form>
         <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
+        <div class="register-hint">
+            Noch kein Konto?
+            <router-link to="/register" class="register-link">Hier registrieren</router-link>
+        </div>
     </div>
     <router-view />
 </template>

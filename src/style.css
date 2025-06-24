@@ -230,6 +230,25 @@ button:focus-visible {
   border: 1px solid #ccc;
 }
 
+.register-hint {
+  margin-top: 1.5rem;
+  font-size: 0.98em;
+  color: #ccc;
+  text-align: center;
+}
+
+.register-link {
+  color: var(--primary);
+  margin-left: 0.3em;
+  text-decoration: underline;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.register-link:hover {
+  color: var(--accent);
+}
+
 /* Responsive */
 @media (max-width: 700px) {
   .page-container {
