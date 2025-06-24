@@ -1,33 +1,29 @@
 <template>
   <div class="my-team-page">
-    <h1>Mein Team</h1>
+    <h1><strong>Dein Team:</strong> <span class="team-name">{{ team.name }}</span></h1>
     <div v-if="loading">Lade Teamdaten...</div>
     <div v-else-if="!team">
       <p>Du bist in keinem Team.</p>
       <button @click="goToTeams">Zu den Teams</button>
     </div>
     <div v-else>
-      <h2>{{ team.name }}</h2>
       <h3>Mitglieder</h3>
       <p v-if="memberListError" class="error">{{ memberListError }}</p>
-      <pre v-if="memberRequestBody" class="info">{{ memberRequestBody }}</pre>
-      <ul>
-        <li v-for="member in members" :key="member.id">
-          {{ member.username || member.email }}
-        </li>
-      </ul>
-      <h3>Mitglied einladen</h3>
-      <form @submit.prevent="inviteMember">
-        <label>
-          E-Mail-Adresse:
-          <input type="email" v-model="inviteEmail" required />
-        </label>
-        <button type="submit">Einladen</button>
-      </form>
-      <p v-if="inviteSuccess" class="success">Einladung verschickt!</p>
-      <p v-if="inviteError" class="error">{{ inviteError }}</p>
-      <h4>Oder teile diesen Link:</h4>
-      <input type="text" :value="inviteLink" readonly style="width:100%;" @focus="$event.target.select()" />
+      <table class="members-table">
+        <thead>
+          <tr>
+            <th>Username</th>
+            <th>User-ID</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="member in members" :key="member.user_id">
+            <td>{{ member.profiles?.username || '-' }}</td>
+            <td>{{ member.user_id }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <button class="invite-btn" @click="goToInvite">Mitglied einladen</button>
     </div>
   </div>
 </template>
@@ -42,11 +38,6 @@ const loading = ref(true)
 const team = ref(null)
 const members = ref([])
 const memberListError = ref('')
-const memberRequestBody = ref('') // als String für die Anzeige
-const inviteEmail = ref('')
-const inviteSuccess = ref(false)
-const inviteError = ref('')
-const inviteLink = ref('')
 
 async function fetchMyTeam() {
   loading.value = true
@@ -73,9 +64,6 @@ async function fetchMyTeam() {
     .single()
   team.value = teamData
 
-  // memberRequestBody als String für die Anzeige setzen
-  memberRequestBody.value = JSON.stringify({ teamId: teamData.id }, null, 2)
-
   // Hole Mitglieder über Supabase Function
   const { data, error } = await supabase.functions.invoke('Get-team-Members', {
     body: { teamId: teamData.id }
@@ -88,22 +76,15 @@ async function fetchMyTeam() {
     memberListError.value = ''
   }
 
-  // Einladung-Link generieren
-  inviteLink.value = `${window.location.origin}/join-team/${teamData.id}`
   loading.value = false
-}
-
-async function inviteMember() {
-  inviteSuccess.value = false
-  inviteError.value = ''
-  // Hier könntest du eine Einladung per E-Mail verschicken (z.B. über Supabase Functions oder externen Service)
-  // Für Demo: Zeige einfach Erfolg an
-  inviteSuccess.value = true
-  inviteEmail.value = ''
 }
 
 function goToTeams() {
   router.push('/teams')
+}
+
+function goToInvite() {
+  router.push('/invite-member')
 }
 
 onMounted(fetchMyTeam)
@@ -111,33 +92,36 @@ onMounted(fetchMyTeam)
 
 <style scoped>
 .my-team-page {
-  max-width: 500px;
+  max-width: 600px;
   margin: 2rem auto;
 }
-ul {
-  padding-left: 0;
-  list-style-position: inside;
+.team-header {
+  margin-bottom: 1.5rem;
+  font-size: 1.2em;
+}
+.team-name {
+  color: #42b883;
+  font-weight: bold;
+  margin-left: 0.5em;
+}
+.members-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1.5rem;
+}
+.members-table th,
+.members-table td {
+  border: 1px solid #ccc;
+  padding: 0.5em 1em;
   text-align: left;
 }
-li {
-  margin-bottom: 0.5rem;
-}
-input[type="email"], input[type="text"] {
-  width: 100%;
-  padding: 0.5rem;
-  margin-top: 0.25rem;
-  margin-bottom: 1rem;
-}
-button {
+.invite-btn {
   padding: 0.5rem 1rem;
   background-color: #42b883;
   color: white;
   border: none;
   border-radius: 4px;
-}
-.success {
-  color: green;
-  margin-top: 1rem;
+  cursor: pointer;
 }
 .error {
   color: red;

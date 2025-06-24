@@ -8,6 +8,7 @@ import RegisterPage from '../views/RegisterPage.vue'
 import ProfilePage from '../views/ProfilePage.vue'
 import NewRidePage from '../views/NewRidePage.vue'
 import MyTeamPage from '../views/MyTeamPage.vue'
+import InviteMemberPage from '../views/InviteMemberPage.vue'
 
 const routes = [
     { path: '/', component: HomePage },
@@ -18,7 +19,8 @@ const routes = [
     { path: '/profile', component: ProfilePage },
     { path: '/rides/new', component: NewRidePage },
     { path: '/my-team', component: MyTeamPage },
-    { path: '/join-team/:teamId', component: () => import('../views/JoinTeamPage.vue') }
+    { path: '/join-team/:teamId', component: () => import('../views/JoinTeamPage.vue') },
+    { path: '/invite-member', component: () => import('../views/InviteMemberPage.vue') }
 ]
 
 const router = createRouter({
