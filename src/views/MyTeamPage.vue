@@ -69,23 +69,16 @@ async function fetchMyTeam() {
     .single()
   team.value = teamData
 
-  // Hole Mitglieder
-  const { data: memberList } = await supabase
-    .from('members')
-    .select('user_id, profiles(username), auth_users(email)')
-    .eq('team_id', teamData.id)
-    .leftJoin('profiles', 'members.user_id', 'profiles.id')
-    .leftJoin('auth.users', 'members.user_id', 'auth.users.id')
-
-  // Fallback, falls leftJoin nicht unterstützt wird:
-  if (memberList) {
-    members.value = memberList.map(m => ({
-      id: m.user_id,
-      username: m.profiles?.username,
-      email: m.auth_users?.email
-    }))
-  } else {
+  // Hole Mitglieder über Supabase Function
+  const { data, error } = await supabase.functions.invoke('Get-team-Members', {
+    body: { name: 'Functions', teamId: teamData.id }
+  })
+  if (error) {
     members.value = []
+    inviteError.value = `Fehler beim Laden der Mitglieder: ${error.message || error}`
+  } else {
+    members.value = data.members
+    inviteError.value = ''
   }
 
   // Einladung-Link generieren

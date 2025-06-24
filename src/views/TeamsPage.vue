@@ -6,12 +6,21 @@
         <div v-else-if="teams.length === 0">Keine Teams gefunden.</div>
         <ul v-else>
             <li v-for="team in teams" :key="team.id">
-                <strong>{{ team.name }}</strong>
-                – {{ team.total_km ?? 0 }} km
+                <template v-if="team.id === myTeamId">
+                    <router-link :to="'/my-team'" class="my-team-link">
+                        <strong>{{ team.name }}</strong>
+                    </router-link>
+                    – {{ team.total_km ?? 0 }} km
+                    <span class="badge">Mein Team</span>
+                </template>
+                <template v-else>
+                    <strong>{{ team.name }}</strong>
+                    – {{ team.total_km ?? 0 }} km
+                </template>
             </li>
         </ul>
 
-        <div v-if="!hasTeam">
+        <div v-if="!myTeamId">
             <button @click="goToCreateTeam">➕ Team erstellen</button>
         </div>
 
@@ -28,7 +37,7 @@ const router = useRouter()
 const teams = ref([])
 const loading = ref(true)
 const error = ref(null)
-const hasTeam = ref(false)
+const myTeamId = ref(null)
 
 async function fetchTeams() {
     loading.value = true
@@ -77,18 +86,18 @@ async function fetchTeams() {
     loading.value = false
 }
 
-async function checkUserTeam() {
-    const user = supabase.auth.getUser()
-    const { data, error: teamError } = await supabase
-        .from('teams')
-        .select('id')
-        .eq('created_by', (await user).data.user.id)
-
-    if (teamError) {
-        console.error(teamError)
-    } else {
-        hasTeam.value = data.length > 0
+async function fetchMyTeamId() {
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) {
+        myTeamId.value = null
+        return
     }
+    const { data: memberData } = await supabase
+        .from('members')
+        .select('team_id')
+        .eq('user_id', user.id)
+        .single()
+    myTeamId.value = memberData?.team_id || null
 }
 
 function goToCreateTeam() {
@@ -97,7 +106,7 @@ function goToCreateTeam() {
 
 onMounted(() => {
     fetchTeams()
-    checkUserTeam()
+    fetchMyTeamId()
 })
 </script>
 
@@ -117,6 +126,19 @@ ul {
 }
 li {
     margin-bottom: 0.5rem;
+}
+.my-team-link {
+    color: #42b883;
+    text-decoration: underline;
+    font-weight: bold;
+}
+.badge {
+    background: #42b883;
+    color: #fff;
+    border-radius: 8px;
+    padding: 0.1em 0.6em;
+    font-size: 0.8em;
+    margin-left: 0.5em;
 }
 .error {
     color: red;
