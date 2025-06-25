@@ -39,6 +39,29 @@
             <button @click="goToCreateTeam">➕ Team erstellen</button>
         </div>
 
+        <div v-else class="teams-list-mobile">
+            <div
+                v-for="(team, idx) in sortedTeams"
+                :key="team.id"
+                class="team-card"
+                :class="{ 'my-team': team.id === myTeamId }"
+            >
+                <div class="team-rank">#{{ idx + 1 }}</div>
+                <div class="team-name">
+                    <template v-if="team.id === myTeamId">
+                        <router-link :to="'/my-team'" class="my-team-link">
+                            <strong>{{ team.name }}</strong>
+                        </router-link>
+                        <span class="badge">Mein Team</span>
+                    </template>
+                    <template v-else>
+                        <strong>{{ team.name }}</strong>
+                    </template>
+                </div>
+                <div class="team-km">{{ team.total_km ?? 0 }} km</div>
+            </div>
+        </div>
+
         <p v-if="error" class="error">{{ error }}</p>
     </div>
 </template>
