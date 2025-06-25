@@ -54,9 +54,10 @@ const emailConfirmed = ref(true)
 const memberId = ref(null)
 const success = ref(null)
 const editUsername = ref('')
-const usernameSuccess = ref('')
 const usernameError = ref('')
+const usernameSuccess = ref('')
 
+// Nach Laden des Profils Username ins Eingabefeld übernehmen
 const fetchProfile = async () => {
     const { data: { user }, error: userError } = await supabase.auth.getUser()
     if (userError || !user) {
@@ -79,7 +80,7 @@ const fetchProfile = async () => {
     }
 
     profile.value = profileData
-    editUsername.value = profileData.username // Setze den Benutzernamen zum Bearbeiten
+    editUsername.value = profileData.username // <--- hier ergänzen
 
     const { data: memberData } = await supabase
         .from('members')
@@ -165,28 +166,26 @@ function confirmDeleteAccount() {
 }
 
 async function updateUsername() {
-  error.value = null
-  success.value = null
-
-  const { data: { user }, error: userError } = await supabase.auth.getUser()
-  if (userError || !user) {
-    error.value = 'Nicht eingeloggt.'
+  usernameError.value = ''
+  usernameSuccess.value = ''
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) {
+    usernameError.value = 'Nicht eingeloggt.'
     return
   }
-
-  // Aktualisiere den Benutzernamen in der Datenbank
+  if (!editUsername.value || editUsername.value.length < 3) {
+    usernameError.value = 'Benutzername zu kurz.'
+    return
+  }
   const { error: updateError } = await supabase
     .from('profiles')
     .update({ username: editUsername.value })
     .eq('id', user.id)
-
   if (updateError) {
-    usernameError.value = 'Fehler beim Aktualisieren des Benutzernamens: ' + updateError.message
-    usernameSuccess.value = ''
+    usernameError.value = 'Fehler beim Speichern: ' + updateError.message
   } else {
-    usernameSuccess.value = 'Benutzername erfolgreich aktualisiert.'
-    usernameError.value = ''
-    profile.value.username = editUsername.value // Lokale Aktualisierung des Profils
+    usernameSuccess.value = 'Benutzername gespeichert!'
+    profile.value.username = editUsername.value
   }
 }
 
