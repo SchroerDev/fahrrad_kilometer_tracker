@@ -1,17 +1,21 @@
 <template>
-    <div class="page-container">
-        <h1>Registrieren</h1>
-        <form @submit.prevent="register">
+    <div class="login-container">
+        <h1>🚴 Fahrrad App – Login</h1>
+        <form @submit.prevent="login">
             <input v-model="email" type="email" placeholder="E-Mail" required />
             <input v-model="password" type="password" placeholder="Passwort" required />
-            <input v-model="username" type="text" placeholder="Benutzername" required />
-            <button type="submit">Registrieren</button>
+            <button type="submit">Anmelden</button>
         </form>
         <button class="oauth-btn" @click="signInWithGithub" type="button">
-            <span style="margin-right:0.5em;">🐙</span> Mit GitHub registrieren
+            <span style="margin-right:0.5em;">🐙</span> Mit GitHub anmelden
         </button>
-        <p v-if="error" class="error">{{ error }}</p>
+        <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
+        <div class="register-hint">
+            Noch kein Konto?
+            <router-link to="/register" class="register-link">Hier registrieren</router-link>
+        </div>
     </div>
+    <router-view />
 </template>
 
 <script setup>
@@ -20,43 +24,31 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { supabase } from '../supabaseClient'
 
-const email = ref('')
-const password = ref('')
-const username = ref('')
-const error = ref(null)
 const router = useRouter()
 
-async function register() {
-    error.value = null
-    const { data, error: signUpError } = await supabase.auth.signUp({
+const email = ref('')
+const password = ref('')
+const errorMessage = ref('')
+
+async function login() {
+    errorMessage.value = ''
+    const { error } = await supabase.auth.signInWithPassword({
         email: email.value,
         password: password.value
     })
-
-    if (signUpError) {
-        error.value = signUpError.message
-        return
+    if (error) {
+        errorMessage.value = error.message
+    } else {
+        router.push('/teams')
     }
-
-    // Benutzerprofil speichern
-    const userId = data.user?.id
-    if (userId) {
-        const { error: profileError } = await supabase.from('profiles').update({ username: username.value }).eq('id', userId)
-        if (profileError) {
-            error.value = profileError.message
-            return
-        }
-    }
-
-    router.push('/teams')
 }
 
 async function signInWithGithub() {
-    const { error: oauthError } = await supabase.auth.signInWithOAuth({
+    const { error } = await supabase.auth.signInWithOAuth({
         provider: 'github'
     })
-    if (oauthError) {
-        error.value = oauthError.message
+    if (error) {
+        errorMessage.value = error.message
     }
 }
 </script>

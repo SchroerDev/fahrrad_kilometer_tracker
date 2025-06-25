@@ -7,6 +7,9 @@
             <input v-model="username" type="text" placeholder="Benutzername" required />
             <button type="submit">Registrieren</button>
         </form>
+        <button class="oauth-btn" @click="signInWithGithub" type="button">
+            <span style="margin-right:0.5em;">🐙</span> Mit GitHub registrieren
+        </button>
         <p v-if="error" class="error">{{ error }}</p>
     </div>
 </template>
@@ -47,5 +50,36 @@ async function register() {
 
     router.push('/teams')
 }
+
+async function signInWithGithub() {
+    const { error: oauthError } = await supabase.auth.signInWithOAuth({
+        provider: 'github'
+    })
+    if (oauthError) {
+        error.value = oauthError.message
+    }
+}
 </script>
+
+<style>
+.oauth-btn {
+    margin-top: 1.2rem;
+    width: 100%;
+    background: #24292f;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 0.6em 1.2em;
+    font-size: 1em;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.oauth-btn:hover {
+    background: #444d56;
+}
+</style>
 
