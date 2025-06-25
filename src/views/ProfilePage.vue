@@ -30,6 +30,9 @@
         </li>
       </ul>
       <p v-else>Keine Fahrten gefunden.</p>
+      <button class="delete-account-btn" @click="confirmDeleteAccount">
+        Account löschen
+      </button>
     </div>
   </div>
 </template>
@@ -45,6 +48,7 @@ const error = ref(null)
 const rides = ref([])
 const emailConfirmed = ref(true)
 const memberId = ref(null)
+const success = ref(null)
 
 const fetchProfile = async () => {
     const { data: { user }, error: userError } = await supabase.auth.getUser()
@@ -129,5 +133,46 @@ function formatDate(dateString) {
   return `${day}.${month}.${year} ${hours}:${minutes}`
 }
 
+async function deleteAccount() {
+  error.value = null
+  success.value = null
+  // Hier solltest du eine eigene Edge Function aufrufen, die den User löscht!
+  const { data: { user } } = await supabase.auth.getUser()
+  const { error: funcError } = await supabase.functions.invoke('delete-user', {
+    body: { userId: user.id }
+  })
+  if (funcError) {
+    error.value = 'Fehler beim Löschen des Accounts: ' + funcError.message
+  } else {
+    success.value = 'Account gelöscht.'
+    await supabase.auth.signOut()
+    window.location.href = '/login'
+  }
+}
+
+function confirmDeleteAccount() {
+  if (confirm('Bist du sicher, dass du deinen Account unwiderruflich löschen möchtest?')) {
+    deleteAccount()
+  }
+}
+
 onMounted(fetchProfile)
 </script>
+
+<style>
+.delete-account-btn {
+  margin-top: 2rem;
+  background: #e74c3c;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.7em 1.5em;
+  font-size: 1em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.delete-account-btn:hover {
+  background: #c0392b;
+}
+</style>
