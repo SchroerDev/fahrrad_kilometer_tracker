@@ -4,19 +4,6 @@ import App from './App.vue'
 import router from './router'
 import { supabase } from './supabaseClient'
 
-// Hilfsfunktion: Hash-Parameter in Query-Parameter umwandeln
-function convertHashToQuery() {
-  if (window.location.hash.startsWith('#/access_token=')) {
-    // Entferne das führende #/
-    const hash = window.location.hash.replace('#/', '#')
-    // Ersetze # durch ?
-    const url = window.location.href.replace(hash, hash.replace('#', '?'))
-    window.location.replace(url)
-  }
-}
-
-convertHashToQuery()
-
 async function init() {
   // Warte auf die Session-Initialisierung
   let sessionChecked = false
