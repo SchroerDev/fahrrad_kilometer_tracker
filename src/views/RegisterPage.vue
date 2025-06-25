@@ -30,7 +30,10 @@ async function register() {
     error.value = null
     const { data, error: signUpError } = await supabase.auth.signUp({
         email: email.value,
-        password: password.value
+        password: password.value,
+        options: {
+            emailRedirectTo: 'https://schroerdev.github.io/fahrrad_kilometer_tracker/'
+          } 
     })
 
     if (signUpError) {
