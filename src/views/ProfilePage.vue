@@ -10,7 +10,11 @@
         Bitte bestätige deine E-Mail-Adresse, um alle Funktionen nutzen zu können.
       </div>
       <p>
-        <strong>Benutzername:</strong> {{ profile.username }}
+        <strong>Benutzername:</strong>
+        <input v-model="editUsername" class="username-input" />
+        <button @click="updateUsername" class="update-username-btn">Speichern</button>
+        <span v-if="usernameSuccess" class="success">{{ usernameSuccess }}</span>
+        <span v-if="usernameError" class="error">{{ usernameError }}</span>
       </p>
       <p>
         <strong>Team:</strong> {{ teamName }}
@@ -49,6 +53,9 @@ const rides = ref([])
 const emailConfirmed = ref(true)
 const memberId = ref(null)
 const success = ref(null)
+const editUsername = ref('')
+const usernameSuccess = ref('')
+const usernameError = ref('')
 
 const fetchProfile = async () => {
     const { data: { user }, error: userError } = await supabase.auth.getUser()
@@ -72,6 +79,7 @@ const fetchProfile = async () => {
     }
 
     profile.value = profileData
+    editUsername.value = profileData.username // Setze den Benutzernamen zum Bearbeiten
 
     const { data: memberData } = await supabase
         .from('members')
@@ -156,6 +164,32 @@ function confirmDeleteAccount() {
   }
 }
 
+async function updateUsername() {
+  error.value = null
+  success.value = null
+
+  const { data: { user }, error: userError } = await supabase.auth.getUser()
+  if (userError || !user) {
+    error.value = 'Nicht eingeloggt.'
+    return
+  }
+
+  // Aktualisiere den Benutzernamen in der Datenbank
+  const { error: updateError } = await supabase
+    .from('profiles')
+    .update({ username: editUsername.value })
+    .eq('id', user.id)
+
+  if (updateError) {
+    usernameError.value = 'Fehler beim Aktualisieren des Benutzernamens: ' + updateError.message
+    usernameSuccess.value = ''
+  } else {
+    usernameSuccess.value = 'Benutzername erfolgreich aktualisiert.'
+    usernameError.value = ''
+    profile.value.username = editUsername.value // Lokale Aktualisierung des Profils
+  }
+}
+
 onMounted(fetchProfile)
 </script>
 
@@ -174,5 +208,33 @@ onMounted(fetchProfile)
 }
 .delete-account-btn:hover {
   background: #c0392b;
+}
+.username-input {
+  padding: 0.5em;
+  font-size: 1em;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-right: 0.5em;
+}
+.update-username-btn {
+  background: #3498db;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 0.5em 1em;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.update-username-btn:hover {
+  background: #2980b9;
+}
+.success {
+  color: #27ae60;
+  margin-left: 1em;
+}
+.error {
+  color: #e74c3c;
+  margin-left: 1em;
 }
 </style>
