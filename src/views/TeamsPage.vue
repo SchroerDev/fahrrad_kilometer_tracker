@@ -80,7 +80,7 @@ const teams = ref([])
 const loading = ref(true)
 const error = ref(null)
 const myTeamId = ref(null)
-const isMobile = ref(window.innerWidth <= 700)
+const isMobile = ref(window.innerWidth <= 900)
 
 async function fetchTeams() {
     loading.value = true
