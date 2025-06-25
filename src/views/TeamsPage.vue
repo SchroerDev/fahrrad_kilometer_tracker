@@ -4,7 +4,9 @@
 
         <div v-if="loading">Lade Teams...</div>
         <div v-else-if="teams.length === 0">Keine Teams gefunden.</div>
-        <table v-else class="teams-table">
+        
+        <!-- Desktop-Tabelle -->
+        <table v-if="!isMobile" class="teams-table">
             <thead>
                 <tr>
                     <th>Rang</th>
@@ -35,10 +37,7 @@
             </tbody>
         </table>
 
-        <div v-if="!myTeamId">
-            <button @click="goToCreateTeam">➕ Team erstellen</button>
-        </div>
-
+        <!-- Mobile-Karten -->
         <div v-else class="teams-list-mobile">
             <div
                 v-for="(team, idx) in sortedTeams"
@@ -62,13 +61,17 @@
             </div>
         </div>
 
+        <div v-if="!myTeamId">
+            <button @click="goToCreateTeam">➕ Team erstellen</button>
+        </div>
+
         <p v-if="error" class="error">{{ error }}</p>
     </div>
 </template>
 
 <script setup>
 import '../style.css'
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { supabase } from '../supabaseClient'
 
@@ -77,6 +80,7 @@ const teams = ref([])
 const loading = ref(true)
 const error = ref(null)
 const myTeamId = ref(null)
+const isMobile = ref(window.innerWidth <= 700)
 
 async function fetchTeams() {
     loading.value = true
@@ -147,8 +151,17 @@ const sortedTeams = computed(() => {
     return [...teams.value].sort((a, b) => (b.total_km ?? 0) - (a.total_km ?? 0))
 })
 
+function handleResize() {
+  isMobile.value = window.innerWidth <= 700
+}
+
 onMounted(() => {
     fetchTeams()
     fetchMyTeamId()
+    window.addEventListener('resize', handleResize)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', handleResize)
 })
 </script>
