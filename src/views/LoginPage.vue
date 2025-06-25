@@ -46,7 +46,7 @@ async function login() {
 async function signInWithGithub() {
     const { error } = await supabase.auth.signInWithOAuth({
         provider: 'github', 
-        redirectTo: window.location.origin
+        redirectTo: "https://schroerdev.github.io/fahrrad_kilometer_tracker/"
     })
     if (error) {
         errorMessage.value = error.message
