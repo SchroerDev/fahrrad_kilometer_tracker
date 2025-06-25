@@ -138,7 +138,7 @@ async function deleteAccount() {
   success.value = null
   // Hier solltest du eine eigene Edge Function aufrufen, die den User löscht!
   const { data: { user } } = await supabase.auth.getUser()
-  const { error: funcError } = await supabase.functions.invoke('delete-user', {
+  const { error: funcError } = await supabase.functions.invoke('Delete-user', {
     body: { userId: user.id }
   })
   if (funcError) {
