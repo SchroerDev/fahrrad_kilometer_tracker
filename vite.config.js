@@ -18,10 +18,12 @@ export default defineConfig({
         name: 'Fahrrad Kilometer App',
         short_name: 'FahrradApp',
         description: 'Sammle und vergleiche gefahrene Fahrradkilometer',
-        theme_color: '#42b883',
-        background_color: '#ffffff',
+        start_url: '/fahrrad_kilometer_tracker/',
+        scope: '/fahrrad_kilometer_tracker/',
         display: 'standalone',
-        start_url: '/',
+        background_color: '#ffffff',
+        theme_color: '#42b883',
+        lang: 'de',
         icons: [
           {
             src: 'pwa-192x192.png',

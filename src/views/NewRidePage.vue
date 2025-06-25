@@ -63,7 +63,28 @@ let marker = null
 onMounted(() => {
   const map = new maplibregl.Map({
     container: mapContainer.value,
-    style: 'https://tiles.stadiamaps.com/styles/osm_bright.json',
+    style: {
+      version: 8,
+      sources: {
+        osm: {
+          type: 'raster',
+          tiles: [
+            'https://a.tile.openstreetmap.org/{z}/{x}/{y}.png',
+            'https://b.tile.openstreetmap.org/{z}/{x}/{y}.png',
+            'https://c.tile.openstreetmap.org/{z}/{x}/{y}.png'
+          ],
+          tileSize: 256,
+          attribution: '© OpenStreetMap contributors'
+        }
+      },
+      layers: [
+        {
+          id: 'osm',
+          type: 'raster',
+          source: 'osm'
+        }
+      ]
+    },
     center: [10.4515, 51.1657],
     zoom: 6
   })

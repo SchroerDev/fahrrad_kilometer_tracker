@@ -18,7 +18,7 @@ async function init() {
     }
     if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
       // Optional: z.B. zur Teamseite weiterleiten
-      // router.replace('/teams')
+      router.replace('/teams')
     }
   })
 
