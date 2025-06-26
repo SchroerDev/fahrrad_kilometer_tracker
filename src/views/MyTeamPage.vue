@@ -92,6 +92,3 @@ function goToInvite() {
 onMounted(fetchMyTeam)
 </script>
 
-<style scoped>
-/* leer, alles in style.css */
-</style>

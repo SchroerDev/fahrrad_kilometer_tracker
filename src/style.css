@@ -1,4 +1,6 @@
-/* Grundlegende Farben und Schrift */
+/* =========================
+   Grundlegende Farben & Variablen
+   ========================= */
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -17,24 +19,15 @@
   --primary-dark: #2c7a5a;
   --accent: #646cff;
   --danger: #e74c3c;
+  --success: #27ae60;
   --bg-light: #2d323c;
   --bg-card: #23272f;
   --border-radius: 10px;
 }
 
-/* Links */
-a {
-  font-weight: 500;
-  color: var(--accent);
-  text-decoration: none;
-  transition: color 0.2s;
-}
-a:hover {
-  color: #535bf2;
-  text-decoration: underline;
-}
-
-/* Body und App-Container */
+/* =========================
+   Grundlayout & Container
+   ========================= */
 body {
   margin: 0;
   min-width: 320px;
@@ -48,10 +41,9 @@ body {
   padding: 2rem 0;
 }
 
-/* Seiten-Layout */
 .page-container {
   max-width: 1000px;
-  margin: 5.5rem auto 2rem auto; /* Abstand oben für Navbar */
+  margin: 5.5rem auto 2rem auto;
   padding: 2rem 2.5rem 2.5rem 2.5rem;
   background: var(--bg-card);
   border-radius: var(--border-radius);
@@ -59,27 +51,9 @@ body {
   min-height: 60vh;
 }
 
-/* INPUT-Felder */
-input {
-  display: block;
-  width: 100%;
-  margin-bottom: 1rem;
-  padding: 0.5rem;
-  box-sizing: border-box;
-}
-
-/* Login-spezifisch, falls du das Layout schmaler möchtest */
-.login-container {
-    max-width: 400px;
-    margin: 5.5rem auto 2rem auto;
-    padding: 2rem;
-    background: var(--bg-card);
-    border-radius: var(--border-radius);
-    box-shadow: 0 4px 24px 0 rgba(0,0,0,0.10);
-}
-
-
-/* Überschriften */
+/* =========================
+   Überschriften & Listen
+   ========================= */
 h1, h2, h3 {
   text-align: left;
   margin-top: 0;
@@ -87,20 +61,10 @@ h1, h2, h3 {
   color: var(--primary);
   letter-spacing: 0.01em;
 }
-h1 {
-  font-size: 2.2em;
-  font-weight: 700;
-}
-h2 {
-  font-size: 1.5em;
-  font-weight: 600;
-}
-h3 {
-  font-size: 1.15em;
-  font-weight: 500;
-}
+h1 { font-size: 2.2em; font-weight: 700; }
+h2 { font-size: 1.5em; font-weight: 600; }
+h3 { font-size: 1.15em; font-weight: 500; }
 
-/* Listen */
 ul {
   padding-left: 0;
   list-style-position: inside;
@@ -114,12 +78,56 @@ li {
   padding: 0.7em 1em;
   transition: background 0.2s;
 }
-li:hover {
-  background: #28303a;
+li:hover { background: #28303a; }
+
+/* =========================
+   Links
+   ========================= */
+a {
+  font-weight: 500;
+  color: var(--accent);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+a:hover {
+  color: #535bf2;
+  text-decoration: underline;
+}
+.my-team-link {
+  color: var(--primary);
+  text-decoration: underline;
+  font-weight: bold;
 }
 
-/* Button */
-button {
+/* =========================
+   Formulare & Eingabefelder
+   ========================= */
+input {
+  display: block;
+  width: 100%;
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  box-sizing: border-box;
+  font-size: 1em;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+.username-input {
+  padding: 0.5em;
+  font-size: 1em;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-right: 0.5em;
+  width: auto;
+  display: inline-block;
+}
+
+/* =========================
+   Buttons
+   ========================= */
+button,
+.update-username-btn,
+.delete-account-btn {
   border-radius: 8px;
   border: none;
   padding: 0.6em 1.4em;
@@ -132,15 +140,77 @@ button {
   transition: background 0.2s, box-shadow 0.2s;
   box-shadow: 0 2px 8px 0 rgba(66,184,131,0.08);
 }
-button:hover {
+button:hover,
+.update-username-btn:hover {
   background-color: var(--primary-dark);
 }
 button:focus,
-button:focus-visible {
+button:focus-visible,
+.update-username-btn:focus,
+.update-username-btn:focus-visible {
   outline: 3px solid var(--accent);
 }
 
-/* ButtonS */
+/* Spezielle Buttons */
+.update-username-btn {
+  background: #3498db;
+  color: #fff;
+  border-radius: 4px;
+  padding: 0.5em 1em;
+  margin-left: 0.5em;
+  transition: background 0.2s;
+}
+.update-username-btn:hover {
+  background: #2980b9;
+}
+.delete-account-btn {
+  margin-top: 2rem;
+  background: var(--danger);
+  color: #fff;
+  border-radius: 8px;
+  padding: 0.7em 1.5em;
+  font-size: 1em;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+.delete-account-btn:hover {
+  background: #c0392b;
+}
+.leave-team-btn {
+  background: #e67e22;
+  color: #fff;
+  border-radius: 8px;
+  padding: 0.5em 1.2em;
+  margin-left: 1em;
+  font-size: 1em;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+.leave-team-btn:hover {
+  background: #ca6c1d;
+}
+.oauth-btn {
+  margin-top: 1.2rem;
+  width: 100%;
+  background: #24292f;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.oauth-btn:hover {
+  background: #444d56;
+}
+.invite-btn {
+  margin-top: 1rem;
+}
 .buttons {
   margin-top: 2rem;
   display: flex;
@@ -148,12 +218,28 @@ button:focus-visible {
   flex-wrap: wrap;
 }
 
-/* Spezielle Elemente */
-.my-team-link {
-  color: var(--primary);
-  text-decoration: underline;
-  font-weight: bold;
+/* =========================
+   Statusmeldungen
+   ========================= */
+.error {
+  color: var(--danger);
+  margin-top: 1rem;
+  font-weight: 500;
+  margin-left: 1em;
 }
+.success {
+  color: var(--success);
+  margin-top: 1rem;
+  margin-left: 1em;
+}
+.warning {
+  color: #f1c40f;
+  margin-bottom: 1em;
+}
+
+/* =========================
+   Badges & Labels
+   ========================= */
 .badge {
   background: var(--primary);
   color: #fff;
@@ -163,17 +249,10 @@ button:focus-visible {
   margin-left: 0.5em;
   vertical-align: middle;
 }
-.error {
-  color: var(--danger);
-  margin-top: 1rem;
-  font-weight: 500;
-}
-.success {
-  color: green;
-  margin-top: 1rem;
-}
 
-/* Karten-Style für Abschnitte */
+/* =========================
+   Karten & Abschnitte
+   ========================= */
 .card {
   background: #23272f;
   border-radius: var(--border-radius);
@@ -182,8 +261,11 @@ button:focus-visible {
   margin-bottom: 2em;
 }
 
-/* Mitglieder-Tabelle */
-.members-table {
+/* =========================
+   Tabellen (Mitglieder & Teams)
+   ========================= */
+.members-table,
+.teams-table {
   width: 100%;
   border-collapse: collapse;
   margin-bottom: 2rem;
@@ -193,94 +275,45 @@ button:focus-visible {
   box-shadow: 0 2px 12px 0 rgba(0,0,0,0.08);
 }
 .members-table th,
-.members-table td {
-  padding: 0.75em 1em;
-  text-align: left;
-}
-.members-table th {
-  background: #2d323c;
-  color: var(--primary);
-  font-weight: 600;
-  border-bottom: 2px solid #2c7a5a;
-}
-.members-table tr {
-  border-bottom: 1px solid #2d323c;
-  transition: background 0.2s;
-}
-.members-table tr:hover {
-  background: #28303a;
-}
-.members-table td {
-  color: #fff;
-  font-size: 1em;
-}
-
-/* Teams-Tabelle */
-.teams-table {
-  width: 100%;
-  min-width: 400px;
-  border-collapse: separate;
-  border-spacing: 0;
-  margin-bottom: 2rem;
-  background: #23272f;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 2px 12px 0 rgba(0,0,0,0.08);
-  table-layout: auto;
-}
-
+.members-table td,
 .teams-table th,
 .teams-table td {
   padding: 0.85em 1.2em;
   text-align: left;
-  border-right: 1px solid #2d323c;
   border-bottom: 1px solid #2d323c;
   vertical-align: middle;
   word-break: break-word;
 }
-
+.members-table th,
+.teams-table th {
+  background: #2d323c;
+  color: var(--primary);
+  font-weight: 600;
+  border-bottom: 2px solid #2c7a5a;
+  font-size: 1.08em;
+}
+.members-table tr,
+.teams-table tr {
+  transition: background 0.2s;
+}
+.members-table tr:hover,
+.teams-table tr:hover {
+  background: #28303a;
+}
+.members-table td,
+.teams-table td {
+  color: #fff;
+  font-size: 1em;
+  background: #23272f;
+}
 .teams-table th:last-child,
 .teams-table td:last-child {
   border-right: none;
 }
 
-.teams-table th {
-  background: #2d323c;
-  color: var(--primary);
-  font-weight: 600;
-  border-top: 2px solid #2c7a5a;
-  border-bottom: 2px solid #2c7a5a;
-  font-size: 1.08em;
-}
-
-.teams-table tr {
-  transition: background 0.2s;
-}
-
-.teams-table tr:hover {
-  background: #28303a;
-}
-
-.teams-table td {
-  color: #fff;
-  font-size: 1em;
-  background: #23272f;
-}
-
-@media (max-width: 700px) {
-  .teams-table, .teams-table thead, .teams-table tbody, .teams-table th, .teams-table td, .teams-table tr {
-    display: block;
-    width: 100%;
-    min-width: unset;
-  }
-  .teams-table th, .teams-table td {
-    border-right: none;
-    border-bottom: 1px solid #2d323c;
-    padding: 0.7em 0.7em;
-  }
-}
-
-/* --- Mobile Kartenansicht für TeamsPage --- */
+/* =========================
+   Mobile Kartenansicht für TeamsPage
+   ========================= */
 @media (max-width: 700px) {
   .teams-table {
     display: none;
@@ -336,19 +369,43 @@ button:focus-visible {
   }
 }
 
-/* Optional: Button für Einladen */
-.invite-btn {
-  margin-top: 1rem;
+/* =========================
+   Weitere Komponenten & Hilfsklassen
+   ========================= */
+.login-container {
+  max-width: 400px;
+  margin: 5.5rem auto 2rem auto;
+  padding: 2rem;
+  background: var(--bg-card);
+  border-radius: var(--border-radius);
+  box-shadow: 0 4px 24px 0 rgba(0,0,0,0.10);
+}
+.register-hint {
+  margin-top: 1.5rem;
+  font-size: 0.98em;
+  color: #ccc;
+  text-align: center;
+}
+.register-link {
+  color: var(--primary);
+  margin-left: 0.3em;
+  text-decoration: underline;
+  font-weight: 500;
+  cursor: pointer;
+}
+.register-link:hover {
+  color: var(--accent);
 }
 
-
+/* =========================
+   Karten & Koordinaten
+   ========================= */
 .coords-row {
   display: flex;
   gap: 1.5rem;
   margin-bottom: 1rem;
   flex-wrap: wrap;
 }
-
 .coord-input {
   width: 120px;
   font-size: 0.95em;
@@ -358,13 +415,11 @@ button:focus-visible {
   border: 1px solid #2d323c;
   border-radius: 6px;
 }
-
 .coord-input[readonly] {
   background: #23272f;
   color: #aaa;
   opacity: 1;
 }
-/* Ride Map */
 .ride-map {
   width: 100%;
   height: 300px;
@@ -374,26 +429,9 @@ button:focus-visible {
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.08);
 }
 
-.register-hint {
-  margin-top: 1.5rem;
-  font-size: 0.98em;
-  color: #ccc;
-  text-align: center;
-}
-
-.register-link {
-  color: var(--primary);
-  margin-left: 0.3em;
-  text-decoration: underline;
-  font-weight: 500;
-  cursor: pointer;
-}
-
-.register-link:hover {
-  color: var(--accent);
-}
-
-/* Responsive */
+/* =========================
+   Responsive Anpassungen
+   ========================= */
 @media (max-width: 700px) {
   .page-container {
     padding: 1rem 0.5rem;

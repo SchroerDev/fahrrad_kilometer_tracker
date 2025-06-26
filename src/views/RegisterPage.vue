@@ -67,25 +67,5 @@ async function signInWithGithub() {
 }
 </script>
 
-<style>
-.oauth-btn {
-    margin-top: 1.2rem;
-    width: 100%;
-    background: #24292f;
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    padding: 0.6em 1.2em;
-    font-size: 1em;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background 0.2s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.oauth-btn:hover {
-    background: #444d56;
-}
-</style>
+
 
