@@ -8,7 +8,7 @@ async function init() {
   // Warte auf die Session-Initialisierung
   let sessionChecked = false
   supabase.auth.onAuthStateChange((event, session) => {
-    if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
+    if ((event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') && router.currentRoute.value.path === '/login') {
       router.replace('/teams')
     }
     if (event === 'SIGNED_OUT') {
