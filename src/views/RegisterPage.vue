@@ -1,7 +1,8 @@
 <template>
     <div class="page-container">
         <h1>Registrieren</h1>
-        <form @submit.prevent="register">
+        <p v-if="success" class="success">{{ success }}</p>
+        <form v-if="!success" @submit.prevent="register">
             <input v-model="email" type="email" placeholder="E-Mail" required />
             <input v-model="password" type="password" placeholder="Passwort" required />
             <input v-model="username" type="text" placeholder="Benutzername" required />
@@ -24,16 +25,18 @@ const email = ref('')
 const password = ref('')
 const username = ref('')
 const error = ref(null)
+const success = ref(null)
 const router = useRouter()
 
 async function register() {
     error.value = null
+    success.value = null
     const { data, error: signUpError } = await supabase.auth.signUp({
         email: email.value,
         password: password.value,
         options: {
             emailRedirectTo: 'https://schroerdev.github.io/fahrrad_kilometer_tracker/'
-          } 
+        }
     })
 
     if (signUpError) {
@@ -51,7 +54,8 @@ async function register() {
         }
     }
 
-    router.push('/teams')
+    // Erfolgsmeldung anzeigen und nicht weiterleiten
+    success.value = 'Bitte bestätige deine E-Mail-Adresse über den Link, den wir dir geschickt haben, bevor du dich einloggst.'
 }
 
 async function signInWithGithub() {
