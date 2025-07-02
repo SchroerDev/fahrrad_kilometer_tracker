@@ -353,6 +353,9 @@ button:focus-visible,
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2em;
   }
   .team-km {
     font-weight: bold;
@@ -360,12 +363,7 @@ button:focus-visible,
     text-align: right;
   }
   .badge {
-    background: #42b883;
-    color: #fff;
-    border-radius: 6px;
-    padding: 0.1em 0.6em;
-    font-size: 0.9em;
-    margin-left: 0.5em;
+    display: none;
   }
 }
 
@@ -443,10 +441,24 @@ button:focus-visible,
   ul {
     font-size: 1em;
   }
-}
-
-.team-members {
-  font-size: 0.95em;
-  color: #aaa;
-  margin-top: 0.2em;
+  .team-name {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2em;
+  }
+  .team-members {
+    font-size: 0.95em;
+    color: #aaa;
+    margin-top: 0.2em;
+    margin-left: 0; /* Kein Abstand nach rechts */
+    white-space: normal;
+  }
+  .badge {
+    display: none;
+  }
 }

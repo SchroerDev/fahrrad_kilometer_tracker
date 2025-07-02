@@ -49,18 +49,10 @@
             >
                 <div class="team-rank">#{{ idx + 1 }}</div>
                 <div class="team-name">
-                    <template v-if="team.id === myTeamId">
-                        <router-link :to="'/my-team'" class="my-team-link">
-                            <strong>{{ team.name }}</strong>
-                        </router-link>
-                        <span class="badge">Mein Team</span>
-                    </template>
-                    <template v-else>
-                        <strong>{{ team.name }}</strong>
-                    </template>
+                    <strong>{{ team.name }}</strong>
+                    <div class="team-members">{{ team.member_count }} Mitglieder</div>
                 </div>
                 <div class="team-km">{{ team.total_km ?? 0 }} km</div>
-                <div class="team-members">{{ team.member_count }} Mitglieder</div>
             </div>
         </div>
 
