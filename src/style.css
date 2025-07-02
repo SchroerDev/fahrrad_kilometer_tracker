@@ -444,3 +444,9 @@ button:focus-visible,
     font-size: 1em;
   }
 }
+
+.team-members {
+  font-size: 0.95em;
+  color: #aaa;
+  margin-top: 0.2em;
+}

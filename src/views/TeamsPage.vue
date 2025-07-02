@@ -12,6 +12,7 @@
                     <th>Rang</th>
                     <th>Teamname</th>
                     <th>Kilometer</th>
+                    <th>Mitglieder</th>
                     <th></th>
                 </tr>
             </thead>
@@ -30,6 +31,7 @@
                         </template>
                     </td>
                     <td>{{ team.total_km ?? 0 }}</td>
+                    <td>{{ team.member_count }}</td>
                     <td>
                         <!-- Optional: weitere Aktionen -->
                     </td>
@@ -58,6 +60,7 @@
                     </template>
                 </div>
                 <div class="team-km">{{ team.total_km ?? 0 }} km</div>
+                <div class="team-members">{{ team.member_count }} Mitglieder</div>
             </div>
         </div>
 
@@ -106,6 +109,7 @@ async function fetchTeams() {
     const teamsWithKm = []
     for (const team of data) {
         let total = 0
+        let memberCount = team.members ? team.members.length : 0
         if (team.members && team.members.length > 0) {
             // Hole alle Fahrten der Teammitglieder
             const userIds = team.members.map(m => m.user_id)
@@ -122,7 +126,8 @@ async function fetchTeams() {
         teamsWithKm.push({
             id: team.id,
             name: team.name,
-            total_km: total
+            total_km: total,
+            member_count: memberCount
         })
     }
     teams.value = teamsWithKm
