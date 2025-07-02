@@ -4,7 +4,7 @@
 
         <div v-if="loading">Lade Teams...</div>
         <div v-else-if="teams.length === 0">Keine Teams gefunden.</div>
-        
+
         <!-- Desktop-Tabelle -->
         <table v-if="!isMobile" class="teams-table">
             <thead>
@@ -41,15 +41,18 @@
 
         <!-- Mobile-Karten -->
         <div v-else class="teams-list-mobile">
-            <div
-                v-for="(team, idx) in sortedTeams"
-                :key="team.id"
-                class="team-card"
-                :class="{ 'my-team': team.id === myTeamId }"
-            >
+            <div v-for="(team, idx) in sortedTeams" :key="team.id" class="team-card"
+                :class="{ 'my-team': team.id === myTeamId }">
                 <div class="team-rank">#{{ idx + 1 }}</div>
                 <div class="team-name">
-                    <strong>{{ team.name }}</strong>
+                    <template v-if="team.id === myTeamId">
+                        <router-link :to="'/my-team'" class="my-team-link">
+                            <strong>{{ team.name }}</strong>
+                        </router-link>
+                    </template>
+                    <template v-else>
+                        <strong>{{ team.name }}</strong>
+                    </template>
                     <div class="team-members">{{ team.member_count }} Mitglieder</div>
                 </div>
                 <div class="team-km">{{ team.total_km ?? 0 }} km</div>
