@@ -1,5 +1,7 @@
 # Fahrrad Kilometer Tracker 🚴
 
+
+
 Dieses Projekt ist eine moderne Vue 3 + Vite Anwendung zum Verwalten und Vergleichen von gefahrenen Fahrradkilometern in Teams.  
 Es dient als Beispiel- und Lernprojekt, um Supabase als Backend (Datenbank, Auth, Edge Functions) in einer echten Anwendung auszuprobieren.
 
