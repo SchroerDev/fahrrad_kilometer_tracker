@@ -44,7 +44,7 @@ async function init() {
           colors: {
             primary: '#42b883',
             secondary: '#2d323c',
-            accent: '#646cff',
+            accent: '#FF7043',
             error: '#e74c3c',
             success: '#27ae60',
             background: '#23272f',
