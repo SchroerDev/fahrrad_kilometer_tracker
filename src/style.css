@@ -51,6 +51,15 @@ body {
   min-height: 60vh;
 }
 
+.login-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(1vh - 64px);
+  /* Höhe der App-Bar */
+  padding: 0 1rem;
+}
+
 /* =========================
    Überschriften & Listen
    ========================= */
@@ -102,67 +111,10 @@ a:hover {
 /* =========================
    Formulare & Eingabefelder
    ========================= */
-input {
-  display: block;
-  width: 100%;
-  margin-bottom: 1rem;
-  padding: 0.5rem;
-  box-sizing: border-box;
-  font-size: 1em;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-.username-input {
-  padding: 0.5em;
-  font-size: 1em;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  margin-right: 0.5em;
-  width: auto;
-  display: inline-block;
-}
 
 /* =========================
    Buttons
    ========================= */
-button,
-.update-username-btn,
-.delete-account-btn {
-  border-radius: 8px;
-  border: none;
-  padding: 0.6em 1.4em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: var(--primary);
-  color: #fff;
-  cursor: pointer;
-  transition: background 0.2s, box-shadow 0.2s;
-  box-shadow: 0 2px 8px 0 rgba(66,184,131,0.08);
-}
-button:hover,
-.update-username-btn:hover {
-  background-color: var(--primary-dark);
-}
-button:focus,
-button:focus-visible,
-.update-username-btn:focus,
-.update-username-btn:focus-visible {
-  outline: 3px solid var(--accent);
-}
-
-/* Spezielle Buttons */
-.update-username-btn {
-  background: #3498db;
-  color: #fff;
-  border-radius: 4px;
-  padding: 0.5em 1em;
-  margin-left: 0.5em;
-  transition: background 0.2s;
-}
-.update-username-btn:hover {
-  background: #2980b9;
-}
 .delete-account-btn {
   margin-top: 2rem;
   background: var(--danger);

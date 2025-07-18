@@ -1,7 +1,11 @@
 <template>
     <div>
-    <NavBar />
-    <router-view />     
+    <v-card class="mx-auto">
+      <v-layout class="pa-0">
+        <NavBar />
+        <router-view />  
+      </v-layout>
+    </v-card>
   </div>
 </template>
   

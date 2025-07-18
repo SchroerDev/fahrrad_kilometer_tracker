@@ -1,8 +1,15 @@
 import { createApp } from 'vue'
-import './style.css'
+// Vuetify
+import 'vuetify/styles'
+import { createVuetify } from 'vuetify'
+import * as components from 'vuetify/components'
+import * as directives from 'vuetify/directives'
+
 import App from './App.vue'
 import router from './router'
 import { supabase } from './supabaseClient'
+import '@mdi/font/css/materialdesignicons.css'
+
 
 async function init() {
   // Warte auf die Session-Initialisierung
@@ -26,7 +33,33 @@ async function init() {
     router.replace('/login')
   }
 
-  createApp(App).use(router).mount('#app')
+  const vuetify = createVuetify({
+    components,
+    directives,
+    theme: {
+      defaultTheme: 'customTheme',
+      themes: {
+        customTheme: {
+          dark: false,
+          colors: {
+            primary: '#42b883',
+            secondary: '#2d323c',
+            accent: '#646cff',
+            error: '#e74c3c',
+            success: '#27ae60',
+            background: '#23272f',
+            surface: '#2d323c',
+          },
+        },
+      },
+    },
+  })
+  
+
+  createApp(App)
+    .use(router)
+    .use(vuetify)
+    .mount('#app')
 }
 
 init()

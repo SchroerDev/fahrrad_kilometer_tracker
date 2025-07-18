@@ -1,48 +1,71 @@
 <template>
-  <div class="page-container">
-    <h1>👤 Profil</h1>
-    <div v-if="error" class="error">{{ error }}</div>
-    <div v-else-if="!profile">
-      Lade Profil...
-    </div>
-    <div v-else>
-      <div v-if="!emailConfirmed" class="warning">
-        Bitte bestätige deine E-Mail-Adresse, um alle Funktionen nutzen zu können.
-      </div>
-      <p>
-        <strong>Benutzername:</strong>
-        <input v-model="editUsername" class="username-input" />
-        <button @click="updateUsername" class="update-username-btn">Speichern</button>
-        <span v-if="usernameSuccess" class="success">{{ usernameSuccess }}</span>
-        <span v-if="usernameError" class="error">{{ usernameError }}</span>
-      </p>
-      <p>
-        <strong>Team:</strong> {{ teamName }}
-        <button 
-          v-if="teamName !== 'Kein Team'" 
-          @click="leaveTeam" 
-          class="leave-team-btn"
-          style="margin-left:1em;"
-        >
-          Team verlassen
-        </button>
-      </p>
-      <h2>Deine Fahrten</h2>
-      <ul v-if="rides.length > 0">
-        <li v-for="ride in rides" :key="ride.id">
-          {{ formatDate(ride.created_at) }}: {{ ride.km }} km
-        </li>
-      </ul>
-      <p v-else>Keine Fahrten gefunden.</p>
-      <button class="delete-account-btn" @click="confirmDeleteAccount">
-        Account löschen
-      </button>
-    </div>
-  </div>
+  <v-main>
+    <v-container class="page-container" fluid>
+      <v-card class="pa-6" elevation="4">
+        <v-card-title class="text-h5">👤 Profil</v-card-title>
+
+        <v-card-text>
+          <v-alert v-if="error" type="error" dense class="mb-4">
+            {{ error }}
+          </v-alert>
+
+          <div v-else-if="!profile">
+            <v-progress-circular indeterminate color="primary" />
+            <span class="ml-2">Lade Profil...</span>
+          </div>
+
+          <div v-else>
+            <v-alert v-if="!emailConfirmed" type="warning" dense class="mb-4">
+              Bitte bestätige deine E-Mail-Adresse, um alle Funktionen nutzen zu können.
+            </v-alert>
+
+            <v-row class="mb-4">
+              <v-col cols="12" md="8">
+                <v-text-field v-model="editUsername" label="Benutzername" variant="outlined" />
+                <v-btn color="primary" @click="updateUsername">Speichern</v-btn>
+              </v-col>
+            </v-row>
+
+            <v-alert v-if="usernameSuccess" type="success" dense class="mb-2">
+              {{ usernameSuccess }}
+            </v-alert>
+            <v-alert v-if="usernameError" type="error" dense class="mb-2">
+              {{ usernameError }}
+            </v-alert>
+
+            <p>
+              <strong>Team:</strong> {{ teamName }}
+              <v-btn v-if="teamName !== 'Kein Team'" color="warning" class="ml-4" @click="leaveTeam">
+                Team verlassen
+              </v-btn>
+            </p>
+
+            <h2 class="mt-6 mb-4">Deine Fahrten</h2>
+
+            <v-list v-if="rides.length > 0" class="mb-4">
+              <v-list-item v-for="ride in rides" :key="ride.id">
+                <v-list-item-content>
+                  <v-list-item-title>
+                    {{ formatDate(ride.created_at) }}: {{ ride.km }} km
+                  </v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list>
+
+            <p v-else>Keine Fahrten gefunden.</p>
+
+            <v-btn color="error" class="mt-6" @click="confirmDeleteAccount">
+              Account löschen
+            </v-btn>
+          </div>
+        </v-card-text>
+      </v-card>
+    </v-container>
+  </v-main>
 </template>
 
+
 <script setup>
-import '../style.css'
 import { ref, onMounted } from 'vue'
 import { supabase } from '../supabaseClient'
 
@@ -80,7 +103,7 @@ const fetchProfile = async () => {
     }
 
     profile.value = profileData
-    editUsername.value = profileData.username // <--- hier ergänzen
+    editUsername.value = profileData.username
 
     const { data: memberData } = await supabase
         .from('members')

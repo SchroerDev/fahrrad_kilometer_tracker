@@ -1,78 +1,82 @@
 <template>
-    <div class="page-container">
-        <h1 class="page-title">🚴 Team-Übersicht</h1>
+    <v-main>
+        <v-container class="page-container" fluid>
+            <v-card class="pa-6 mb-6" elevation="4">
+                <v-card-title class="text-h5">🚴 Team-Übersicht</v-card-title>
 
-        <div v-if="loading">Lade Teams...</div>
-        <div v-else-if="teams.length === 0">Keine Teams gefunden.</div>
+                <v-card-text>
+                    <v-progress-circular v-if="loading" indeterminate color="primary" class="ma-4" />
+                    <div v-else-if="teams.length === 0">Keine Teams gefunden.</div>
 
-        <!-- Desktop-Tabelle -->
-        <table v-if="!isMobile" class="teams-table">
-            <thead>
-                <tr>
-                    <th>Rang</th>
-                    <th>Teamname</th>
-                    <th>Kilometer</th>
-                    <th>Mitglieder</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="(team, idx) in sortedTeams" :key="team.id">
-                    <td>{{ idx + 1 }}</td>
-                    <td>
-                        <template v-if="team.id === myTeamId">
-                            <router-link :to="'/my-team'" class="my-team-link">
-                                <strong>{{ team.name }}</strong>
-                            </router-link>
-                            <span class="badge">Mein Team</span>
+                    <!-- Desktop-Tabelle -->
+                    <v-data-table v-if="!isMobile" :headers="headers" :items="sortedTeams" class="elevation-1 mt-4"
+                        item-value="id" disable-pagination hide-default-footer>
+                        <template #item.name="{ item }">
+                            <div>
+                                <router-link v-if="item.id === myTeamId" :to="'/my-team'" class="my-team-link">
+                                    <strong>{{ item.name }}</strong>
+                                </router-link>
+                                <strong v-else>{{ item.name }}</strong>
+                                <v-chip v-if="item.id === myTeamId" color="primary" size="small" class="ml-2">
+                                    Mein Team
+                                </v-chip>
+                            </div>
                         </template>
-                        <template v-else>
-                            <strong>{{ team.name }}</strong>
+                        <template #item.rank="{ index }">
+                            #{{ index + 1 }}
                         </template>
-                    </td>
-                    <td>{{ team.total_km ?? 0 }}</td>
-                    <td>{{ team.member_count }}</td>
-                    <td>
-                        <!-- Optional: weitere Aktionen -->
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+                    </v-data-table>
 
-        <!-- Mobile-Karten -->
-        <div v-else class="teams-list-mobile">
-            <div v-for="(team, idx) in sortedTeams" :key="team.id" class="team-card"
-                :class="{ 'my-team': team.id === myTeamId }">
-                <div class="team-rank">#{{ idx + 1 }}</div>
-                <div class="team-name">
-                    <template v-if="team.id === myTeamId">
-                        <router-link :to="'/my-team'" class="my-team-link">
-                            <strong>{{ team.name }}</strong>
-                        </router-link>
-                    </template>
-                    <template v-else>
-                        <strong>{{ team.name }}</strong>
-                    </template>
-                    <div class="team-members">{{ team.member_count }} Mitglieder</div>
-                </div>
-                <div class="team-km">{{ team.total_km ?? 0 }} km</div>
-            </div>
-        </div>
+                    <!-- Mobile-Karten -->
+                    <v-row v-else class="mt-4" dense>
+                        <v-col v-for="(team, idx) in sortedTeams" :key="team.id" cols="12">
+                            <v-card :color="team.id === myTeamId ? 'primary' : 'surface'" class="pa-4" elevation="2">
+                                <div class="d-flex justify-space-between align-center">
+                                    <div class="text-h6">#{{ idx + 1 }}</div>
+                                    <div class="text-right">
+                                        <router-link v-if="team.id === myTeamId" :to="'/my-team'" class="my-team-link">
+                                            <strong>{{ team.name }}</strong>
+                                        </router-link>
+                                        <strong v-else>{{ team.name }}</strong>
+                                        <div class="text-caption">
+                                            {{ team.member_count }} Mitglieder
+                                        </div>
+                                    </div>
+                                    <div class="text-right font-weight-bold">
+                                        {{ team.total_km ?? 0 }} km
+                                    </div>
+                                </div>
+                            </v-card>
+                        </v-col>
+                    </v-row>
 
-        <div v-if="!myTeamId">
-            <button @click="goToCreateTeam">➕ Team erstellen</button>
-        </div>
+                    <!-- Team erstellen -->
+                    <div v-if="!myTeamId" class="mt-6">
+                        <v-btn color="primary" @click="goToCreateTeam">
+                            ➕ Team erstellen
+                        </v-btn>
+                    </div>
 
-        <p v-if="error" class="error">{{ error }}</p>
-    </div>
+                    <v-alert v-if="error" type="error" class="mt-4">
+                        {{ error }}
+                    </v-alert>
+                </v-card-text>
+            </v-card>
+        </v-container>
+    </v-main>
 </template>
 
 <script setup>
-import '../style.css'
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { supabase } from '../supabaseClient'
 
+const headers = [
+    { title: 'Rang', value: 'rank' },
+    { title: 'Teamname', value: 'name' },
+    { title: 'Kilometer', value: 'total_km' },
+    { title: 'Mitglieder', value: 'member_count' },
+]
 const router = useRouter()
 const teams = ref([])
 const loading = ref(true)
