@@ -1,20 +1,32 @@
 <template>
-  <div class="page-container">
-    <h1>Team beitreten</h1>
-    <div v-if="loading">Beitritt wird geprüft...</div>
-    <div v-else-if="success">
-      <p>Du bist dem Team erfolgreich beigetreten!</p>
-      <router-link to="/my-team">Zum Team</router-link>
-    </div>
-    <div v-else>
-      <p v-if="error" class="error">{{ error }}</p>
-      <router-link to="/">Zur Startseite</router-link>
-    </div>
-  </div>
+    <v-main>
+        <v-container class="d-flex align-center justify-center" style="min-height: calc(80vh - 64px);" fluid>
+            <v-row justify="center">
+                <v-col cols="12" sm="8" md="6">
+                    <v-card class="pa-4 text-center" elevation="6">
+                        <v-card-title class="text-h5">Team beitreten</v-card-title>
+                        <v-card-text>
+                            <div v-if="loading">
+                                <v-progress-circular indeterminate color="primary" />
+                                <p class="mt-2">Beitritt wird geprüft...</p>
+                            </div>
+                            <div v-else-if="success">
+                                <v-alert type="success" dense border="start">Du bist dem Team erfolgreich beigetreten!</v-alert>
+                                <v-btn color="primary" to="/my-team" class="mt-4">Zum Team</v-btn>
+                            </div>
+                            <div v-else>
+                                <v-alert v-if="error" type="error" dense border="start">{{ error }}</v-alert>
+                                <v-btn color="secondary" to="/" class="mt-4">Zur Startseite</v-btn>
+                            </div>
+                        </v-card-text>
+                    </v-card>
+                </v-col>
+            </v-row>
+        </v-container>
+    </v-main>
 </template>
 
 <script setup>
-import '../style.css'
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { supabase } from '../supabaseClient'
@@ -59,4 +71,3 @@ onMounted(async () => {
   loading.value = false
 })
 </script>
-

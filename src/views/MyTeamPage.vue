@@ -1,36 +1,46 @@
 <template>
-  <div class="page-container">
-    <h1 v-if="team"><strong>Dein Team:</strong> <span class="team-name">{{ team.name }}</span></h1>
-    <h1 v-else>Mein Team</h1>
-    <div v-if="loading">Lade Teamdaten...</div>
-    <div v-else-if="!team">
-      <p>Du bist in keinem Team.</p>
-      <button @click="goToTeams">Zu den Teams</button>
-    </div>
-    <div v-else>
-      <h3>Mitglieder</h3>
-      <p v-if="memberListError" class="error">{{ memberListError }}</p>
-      <table class="members-table">
-        <thead>
-          <tr>
-            <th>Username</th>
-            <th>User-ID</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="member in members" :key="member.user_id">
-            <td>{{ member.profiles?.username || '-' }}</td>
-            <td>{{ member.user_id }}</td>
-          </tr>
-        </tbody>
-      </table>
-      <button class="invite-btn" @click="goToInvite">Mitglied einladen</button>
-    </div>
-  </div>
+    <v-main>
+        <v-container fluid>
+            <v-card class="pa-4" elevation="4">
+                <v-card-title v-if="team" class="text-h5">
+                    Dein Team: <strong class="ml-2">{{ team.name }}</strong>
+                </v-card-title>
+                <v-card-title v-else class="text-h5">
+                    Mein Team
+                </v-card-title>
+
+                <v-card-text>
+                    <v-progress-circular v-if="loading" indeterminate color="primary" />
+
+                    <v-alert v-else-if="!team" type="info" border="start" dense>
+                        Du bist in keinem Team.
+                        <v-btn color="primary" small class="ml-4" @click="goToTeams">Zu den Teams</v-btn>
+                    </v-alert>
+
+                    <div v-else>
+                        <h3 class="text-h6 mb-2">Mitglieder</h3>
+                        <v-alert v-if="memberListError" type="error" dense border="start" class="mb-4">
+                            {{ memberListError }}
+                        </v-alert>
+                        
+                        <v-list dense>
+                            <v-list-item v-for="member in members" :key="member.user_id">
+                                <v-list-item-content>
+                                    <v-list-item-title>{{ member.profiles?.username || '-' }}</v-list-item-title>
+                                    <v-list-item-subtitle>User-ID: {{ member.user_id }}</v-list-item-subtitle>
+                                </v-list-item-content>
+                            </v-list-item>
+                        </v-list>
+
+                        <v-btn color="primary" class="mt-4" @click="goToInvite">Mitglied einladen</v-btn>
+                    </div>
+                </v-card-text>
+            </v-card>
+        </v-container>
+    </v-main>
 </template>
 
 <script setup>
-import '../style.css'
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { supabase } from '../supabaseClient'
@@ -91,4 +101,3 @@ function goToInvite() {
 
 onMounted(fetchMyTeam)
 </script>
-

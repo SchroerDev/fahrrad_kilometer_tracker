@@ -60,6 +60,22 @@
           </div>
         </v-card-text>
       </v-card>
+
+      <!-- Dialog zur Bestätigung der Account-Löschung -->
+      <v-dialog v-model="deleteDialog" persistent max-width="400">
+        <v-card>
+          <v-card-title class="text-h5">Account löschen?</v-card-title>
+          <v-card-text>
+            Bist du sicher, dass du deinen Account unwiderruflich löschen möchtest? Alle deine Daten gehen dabei verloren.
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="blue darken-1" text @click="deleteDialog = false">Abbrechen</v-btn>
+            <v-btn color="red darken-1" text @click="deleteAccount">Löschen</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+
     </v-container>
   </v-main>
 </template>
@@ -79,6 +95,7 @@ const success = ref(null)
 const editUsername = ref('')
 const usernameError = ref('')
 const usernameSuccess = ref('')
+const deleteDialog = ref(false)
 
 // Nach Laden des Profils Username ins Eingabefeld übernehmen
 const fetchProfile = async () => {
@@ -166,6 +183,7 @@ function formatDate(dateString) {
 }
 
 async function deleteAccount() {
+  deleteDialog.value = false
   error.value = null
   success.value = null
   // Hier solltest du eine eigene Edge Function aufrufen, die den User löscht!
@@ -183,9 +201,7 @@ async function deleteAccount() {
 }
 
 function confirmDeleteAccount() {
-  if (confirm('Bist du sicher, dass du deinen Account unwiderruflich löschen möchtest?')) {
-    deleteAccount()
-  }
+  deleteDialog.value = true
 }
 
 async function updateUsername() {
