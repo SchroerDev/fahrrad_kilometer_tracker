@@ -9,6 +9,7 @@ import App from './App.vue'
 import router from './router'
 import { supabase } from './supabaseClient'
 import '@mdi/font/css/materialdesignicons.css'
+import './style.css'
 
 
 async function init() {

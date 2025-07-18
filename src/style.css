@@ -1,0 +1,16 @@
+/* Globale Stile für die Fahrrad-Kilometer-Tracker App */
+
+/* Ändert die Farbe von Links, damit sie auf dunklem Hintergrund besser sichtbar sind. */
+a, a:link {
+  color: #66d9ef; /* Ein heller Cyan-Ton für gute Lesbarkeit */
+  text-decoration: none; /* Entfernt die Unterstreichung */
+}
+
+a:visited {
+  color: #8ab4f8; /* Ein helles Blau für besuchte Links */
+}
+
+/* Optional: Ändert die Farbe, wenn man mit der Maus über den Link fährt. */
+a:hover {
+  color: #a1c9ff;
+}
