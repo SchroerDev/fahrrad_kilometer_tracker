@@ -86,6 +86,11 @@ Es zeigt, wie man Auth, Datenbank, Policies und Edge Functions in einer Vue-App 
 Beiträge sind willkommen!  
 Bitte Issue erstellen oder Pull Request einreichen.
 
+### Code Agent Unterstützung
+
+Dieses Projekt unterstützt automatische Issue-Bearbeitung durch Code Agents.  
+Der Code Agent kann Issues analysieren und entsprechende Lösungen implementieren.
+
 ## Lizenz
 
 MIT Lizenz. Siehe Datei [LICENSE](LICENSE) für Details.
