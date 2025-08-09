@@ -52,9 +52,13 @@ Es zeigt, wie man Auth, Datenbank, Policies und Edge Functions in einer Vue-App 
   ```sh
   npm run build
   ```
-  - Der statische Code befindet sich im `dist` Verzeichnis
+  - Der statische Code befindet sich im `docs` Verzeichnis (für GitHub Pages optimiert)
+- **Automatische Build Pipeline**
+  - Bei Push auf den `main` Branch wird automatisch `npm run build` ausgeführt
+  - Die Build-Ergebnisse werden automatisch in das `docs` Verzeichnis committed
+  - GitHub Actions Workflow in `.github/workflows/build.yml`
 - **GitHub Pages Deployment**
-  - `dist` Verzeichnis als GitHub Pages Quelle in den Repository-Einstellungen festlegen
+  - `docs` Verzeichnis als GitHub Pages Quelle in den Repository-Einstellungen festlegen
   - Beispiel-Deployment: [fahrrad-kilometer-tracker.dein-github-user.github.io](https://fahrrad-kilometer-tracker.dein-github-user.github.io)
 
 ## Supabase Einstellungen
