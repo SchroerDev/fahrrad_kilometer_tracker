@@ -7,44 +7,50 @@ Always reference these instructions first and fallback to search or bash command
 ## Working Effectively
 
 ### Bootstrap and Development Setup
+
 - **Node.js Requirements**: Node.js >=18 (v20.19.4 validated)
 - **Install dependencies**:
   ```bash
   npm install
   ```
+
   - Takes ~1 minute 15 seconds. NEVER CANCEL. Set timeout to 3+ minutes.
 - **Environment setup**:
   ```bash
   cp .env.example .env
   ```
+
   - Edit `.env` file and add your Supabase URL and API keys
-  
-### Build and Development Commands  
+
+### Build and Development Commands
+
 - **Development server**:
   ```bash
   npm run dev
   ```
+
   - Starts Vite dev server on `http://localhost:5173/fahrrad_kilometer_tracker/`
   - Ready in ~300ms
   - Hot reload enabled for all Vue/JS/CSS changes
-  
 - **Production build**:
   ```bash
   npm run build
   ```
+
   - Takes ~8 seconds. NEVER CANCEL. Set timeout to 2+ minutes.
   - Outputs to `docs/` directory (configured for GitHub Pages)
   - Creates PWA service worker and manifest files
   - May show warnings about large chunks (normal, can be ignored)
-  
 - **Preview production build**:
   ```bash
   npm run preview
   ```
+
   - Serves production build on `http://localhost:4173/fahrrad_kilometer_tracker/`
   - Use this to test production builds locally
 
 ### Supabase Local Development
+
 - **Install Supabase CLI**:
   ```bash
   curl -fsSL https://github.com/supabase/cli/releases/download/v2.30.4/supabase_linux_amd64.tar.gz | tar -xz
@@ -53,11 +59,11 @@ Always reference these instructions first and fallback to search or bash command
   ```bash
   ./supabase start
   ```
+
   - Takes 5-10 minutes on first run to download Docker images. NEVER CANCEL. Set timeout to 15+ minutes.
   - Requires Docker to be running
   - Provides local database, auth, API, and studio on various ports (54321-54327)
   - **CRITICAL**: Wait for complete initialization before proceeding
-  
 - **Stop local Supabase**:
   ```bash
   ./supabase stop
@@ -66,6 +72,7 @@ Always reference these instructions first and fallback to search or bash command
 ## Validation and Testing
 
 ### Manual Application Validation
+
 ALWAYS run through these complete user scenarios after making changes:
 
 1. **Registration Flow Validation**:
@@ -78,7 +85,7 @@ ALWAYS run through these complete user scenarios after making changes:
 
 2. **Login Flow Validation**:
    - Navigate to login page
-   - Verify login form has: E-Mail, Passwort fields  
+   - Verify login form has: E-Mail, Passwort fields
    - Verify "Mit GitHub anmelden" button exists
    - Test form validation
 
@@ -88,11 +95,13 @@ ALWAYS run through these complete user scenarios after making changes:
    - Ensure UI renders properly with Vuetify components
 
 ### Build Validation
+
 - Always run `npm run build` to ensure production build succeeds
 - Always run `npm run preview` and manually test the built application
 - Check that PWA files are generated (`docs/sw.js`, `docs/manifest.webmanifest`)
 
 ### No Automated Tests
+
 - This repository has NO automated testing framework
 - NO linting or formatting tools configured
 - Manual validation is the only testing method
@@ -100,6 +109,7 @@ ALWAYS run through these complete user scenarios after making changes:
 ## Project Structure and Key Files
 
 ### Core Application Files
+
 ```
 src/
 ├── main.js              # Vue app initialization with Vuetify and routing
@@ -111,6 +121,7 @@ src/
 ```
 
 ### Configuration Files
+
 ```
 package.json             # Dependencies and npm scripts
 vite.config.js          # Vite build configuration with PWA
@@ -120,6 +131,7 @@ jsconfig.json           # JavaScript project configuration
 ```
 
 ### Supabase Configuration
+
 ```
 supabase/
 ├── config.toml                                    # Supabase local development config
@@ -128,8 +140,9 @@ supabase/
 ```
 
 ### Database Schema
+
 - **profiles**: User profiles (id, username, created_at)
-- **teams**: Team information (id, name, created_by, created_at)  
+- **teams**: Team information (id, name, created_by, created_at)
 - **members**: Team membership (user_id, team_id)
 - **rides**: Bicycle rides (id, user_id, km, StartPoint, created_at)
 - Uses PostGIS extension for geographical data
@@ -138,18 +151,21 @@ supabase/
 ## Key Technologies
 
 ### Frontend Stack
+
 - **Vue 3**: Progressive framework with Composition API
 - **Vite**: Build tool and development server
 - **Vuetify 3**: Material Design component library
 - **Vue Router**: Client-side routing
 - **MapLibre GL**: Map rendering for geographical features
 
-### Backend Stack  
+### Backend Stack
+
 - **Supabase**: Database, authentication, real-time, edge functions
 - **PostgreSQL**: Database with PostGIS extension
 - **Supabase Auth**: User authentication with GitHub OAuth
 
 ### Deployment
+
 - **GitHub Pages**: Static hosting (outputs to `docs/` directory)
 - **PWA**: Progressive Web App with service worker and manifest
 - **Base path**: `/fahrrad_kilometer_tracker/` (configured for GitHub Pages)
@@ -157,22 +173,27 @@ supabase/
 ## Common Development Tasks
 
 ### Adding New Pages
+
 1. Create Vue component in `src/views/`
 2. Add route in `src/router/index.js`
 3. Test navigation in development server
 
 ### Database Changes
+
 1. Create new migration file in `supabase/migrations/`
 2. Test with local Supabase: `./supabase db reset`
 3. Apply to production via Supabase dashboard
 
 ### Styling Changes
+
 - Uses Vuetify theming system (configured in `src/main.js`)
 - Custom CSS in `src/style.css`
 - Material Design Icons available via `@mdi/font`
 
 ### Environment Variables
+
 Required in `.env` file:
+
 ```
 VITE_SUPABASE_URL=https://XXXXXXXXXXXXXXXXX.supabase.co
 VITE_SUPABASE_ANON_KEY=XXXXXXXXXXXXXXXXX
@@ -182,12 +203,14 @@ VITE_SUPABASE_FUNCTIONS_URL=https://XXXXXXXXXXXXXXXXX.supabase.co/functions/v1
 ## Troubleshooting
 
 ### Common Issues
+
 - **Build fails**: Check for syntax errors in Vue components or missing imports
 - **Dev server won't start**: Ensure port 5173 is available
 - **Supabase connection fails**: Verify environment variables in `.env`
 - **PWA not working**: Rebuild application and check service worker registration
 
 ### Performance Notes
+
 - Large bundle warning is normal (Vuetify + MapLibre are large)
 - First Supabase start downloads ~2GB of Docker images
 - Development mode includes helpful Vue DevTools integration
@@ -195,6 +218,7 @@ VITE_SUPABASE_FUNCTIONS_URL=https://XXXXXXXXXXXXXXXXX.supabase.co/functions/v1
 ## Deployment Process
 
 ### GitHub Pages Deployment
+
 1. Ensure base path is set to `/fahrrad_kilometer_tracker/` in `vite.config.js`
 2. Run `npm run build` (outputs to `docs/`)
 3. Push to GitHub
@@ -202,6 +226,7 @@ VITE_SUPABASE_FUNCTIONS_URL=https://XXXXXXXXXXXXXXXXX.supabase.co/functions/v1
 5. Access at: `https://username.github.io/fahrrad_kilometer_tracker/`
 
 ### Production Environment Setup
+
 - Configure production Supabase project
 - Update environment variables for production URLs
 - Enable necessary OAuth providers in Supabase Auth settings

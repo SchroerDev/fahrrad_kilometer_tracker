@@ -1,7 +1,5 @@
 # Fahrrad Kilometer Tracker 🚴
 
-
-
 Dieses Projekt ist eine moderne Vue 3 + Vite Anwendung zum Verwalten und Vergleichen von gefahrenen Fahrradkilometern in Teams.  
 Es dient als Beispiel- und Lernprojekt, um Supabase als Backend (Datenbank, Auth, Edge Functions) in einer echten Anwendung auszuprobieren.
 
@@ -44,7 +42,46 @@ Es zeigt, wie man Auth, Datenbank, Policies und Edge Functions in einer Vue-App 
    ```sh
    npm run dev
    ```
+
    - Browser öffnen und zu `http://localhost:5173` navigieren
+
+## Code-Qualität
+
+### ESLint und Prettier
+
+Das Projekt verwendet ESLint für die Code-Analyse und Prettier für einheitliche Formatierung.
+
+**Verfügbare Kommandos:**
+
+```sh
+# Code prüfen
+npm run lint
+
+# Automatische Fehlerbehebung (wo möglich)
+npm run lint:fix
+
+# Code formatieren
+npm run format
+```
+
+**ESLint Konfiguration:**
+- Vue 3 Composition API Unterstützung
+- Moderne JavaScript Standards (ES2022+)
+- Vue-spezifische Regeln (eslint-plugin-vue)
+- Prettier Integration für Formatierung
+
+**Beispiel ESLint-Ausgabe:**
+```
+/src/views/TeamsPage.vue
+  21:29  error  'v-slot' directive doesn't support any modifier  vue/valid-v-slot
+  32:29  error  'v-slot' directive doesn't support any modifier  vue/valid-v-slot
+
+/src/main.js
+  17:43  error  'session' is defined but never used  no-unused-vars
+
+✖ 3 problems (3 errors, 0 warnings)
+  0 errors and 0 warnings potentially fixable with the --fix option.
+```
 
 ## Produktion
 
@@ -52,6 +89,7 @@ Es zeigt, wie man Auth, Datenbank, Policies und Edge Functions in einer Vue-App 
   ```sh
   npm run build
   ```
+
   - Der statische Code befindet sich im `docs` Verzeichnis (für GitHub Pages optimiert)
 - **Automatische Build Pipeline**
   - Bei Push auf den `main` Branch wird automatisch `npm run build` ausgeführt

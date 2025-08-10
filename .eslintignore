@@ -1,0 +1,21 @@
+# Build outputs
+docs/
+dist/
+
+# Dependencies
+node_modules/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Editor files
+.vscode/
+.idea/
+
+# Test coverage
+coverage/
+
+# Supabase local development
+supabase/
