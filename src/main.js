@@ -11,12 +11,14 @@ import { supabase } from './supabaseClient'
 import '@mdi/font/css/materialdesignicons.css'
 import './style.css'
 
-
 async function init() {
   // Warte auf die Session-Initialisierung
   let sessionChecked = false
   supabase.auth.onAuthStateChange((event, session) => {
-    if ((event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') && router.currentRoute.value.path === '/login') {
+    if (
+      (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') &&
+      router.currentRoute.value.path === '/login'
+    ) {
       router.replace('/teams')
     }
     if (event === 'SIGNED_OUT') {
@@ -29,7 +31,9 @@ async function init() {
   })
 
   // Warte, bis Supabase die Session aus dem URL-Fragment verarbeitet hat
-  const { data: { session } } = await supabase.auth.getSession()
+  const {
+    data: { session },
+  } = await supabase.auth.getSession()
   if (!session && router.currentRoute.value.path !== '/login') {
     router.replace('/login')
   }
@@ -55,12 +59,8 @@ async function init() {
       },
     },
   })
-  
 
-  createApp(App)
-    .use(router)
-    .use(vuetify)
-    .mount('#app')
+  createApp(App).use(router).use(vuetify).mount('#app')
 }
 
 init()

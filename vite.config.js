@@ -2,12 +2,10 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { VitePWA } from 'vite-plugin-pwa'
 
-
-
 export default defineConfig({
   base: '/fahrrad_kilometer_tracker/', // <- wichtig für GitHub Pages!
   build: {
-    outDir: 'docs' // <-- Output-Ordner für GitHub Pages auf /docs setzen
+    outDir: 'docs', // <-- Output-Ordner für GitHub Pages auf /docs setzen
   },
   plugins: [
     vue(),
@@ -28,15 +26,15 @@ export default defineConfig({
           {
             src: 'pwa-192x192.png',
             sizes: '192x192',
-            type: 'image/png'
+            type: 'image/png',
           },
           {
             src: 'pwa-512x512.png',
             sizes: '512x512',
-            type: 'image/png'
-          }
-        ]
-      }
-    })
-  ]
+            type: 'image/png',
+          },
+        ],
+      },
+    }),
+  ],
 })

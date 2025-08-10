@@ -12,14 +12,14 @@ export function validateRideData({ lat, lng, km }) {
   if (!lat || !lng) {
     return {
       isValid: false,
-      error: 'Bitte wähle einen Startpunkt auf der Karte.'
+      error: 'Bitte wähle einen Startpunkt auf der Karte.',
     }
   }
 
   if (!km || parseInt(km, 10) <= 1) {
     return {
       isValid: false,
-      error: 'Bitte gib mindestens 2 Kilometer ein.'
+      error: 'Bitte gib mindestens 2 Kilometer ein.',
     }
   }
 
@@ -50,7 +50,7 @@ export async function createRide({ lat, lng, km }, userId) {
   if (!userId) {
     return {
       success: false,
-      error: 'Nicht eingeloggt.'
+      error: 'Nicht eingeloggt.',
     }
   }
 
@@ -59,7 +59,7 @@ export async function createRide({ lat, lng, km }, userId) {
   if (!validation.isValid) {
     return {
       success: false,
-      error: validation.error
+      error: validation.error,
     }
   }
 
@@ -67,16 +67,18 @@ export async function createRide({ lat, lng, km }, userId) {
   const startPoint = createStartPointGeometry(lng, lat)
 
   // Insert ride into database
-  const { error: insertError } = await supabase.from('rides').insert([{
-    user_id: userId,
-    km: parseInt(km, 10),
-    StartPoint: startPoint
-  }])
+  const { error: insertError } = await supabase.from('rides').insert([
+    {
+      user_id: userId,
+      km: parseInt(km, 10),
+      StartPoint: startPoint,
+    },
+  ])
 
   if (insertError) {
     return {
       success: false,
-      error: insertError.message
+      error: insertError.message,
     }
   }
 

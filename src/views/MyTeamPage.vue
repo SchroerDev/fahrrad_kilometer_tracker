@@ -1,43 +1,41 @@
 <template>
-    <v-main>
-        <v-container fluid>
-            <v-card class="pa-4" elevation="4">
-                <v-card-title v-if="team" class="text-h5">
-                    Dein Team: <strong class="ml-2">{{ team.name }}</strong>
-                </v-card-title>
-                <v-card-title v-else class="text-h5">
-                    Mein Team
-                </v-card-title>
+  <v-main>
+    <v-container fluid>
+      <v-card class="pa-4" elevation="4">
+        <v-card-title v-if="team" class="text-h5">
+          Dein Team: <strong class="ml-2">{{ team.name }}</strong>
+        </v-card-title>
+        <v-card-title v-else class="text-h5"> Mein Team </v-card-title>
 
-                <v-card-text>
-                    <v-progress-circular v-if="loading" indeterminate color="primary" />
+        <v-card-text>
+          <v-progress-circular v-if="loading" indeterminate color="primary" />
 
-                    <v-alert v-else-if="!team" type="info" border="start" dense>
-                        Du bist in keinem Team.
-                        <v-btn color="primary" small class="ml-4" @click="goToTeams">Zu den Teams</v-btn>
-                    </v-alert>
+          <v-alert v-else-if="!team" type="info" border="start" dense>
+            Du bist in keinem Team.
+            <v-btn color="primary" small class="ml-4" @click="goToTeams">Zu den Teams</v-btn>
+          </v-alert>
 
-                    <div v-else>
-                        <h3 class="text-h6 mb-2">Mitglieder</h3>
-                        <v-alert v-if="memberListError" type="error" dense border="start" class="mb-4">
-                            {{ memberListError }}
-                        </v-alert>
-                        
-                        <v-list dense>
-                            <v-list-item v-for="member in members" :key="member.user_id">
-                                <v-list-item-content>
-                                    <v-list-item-title>{{ member.profiles?.username || '-' }}</v-list-item-title>
-                                    <v-list-item-subtitle>User-ID: {{ member.user_id }}</v-list-item-subtitle>
-                                </v-list-item-content>
-                            </v-list-item>
-                        </v-list>
+          <div v-else>
+            <h3 class="text-h6 mb-2">Mitglieder</h3>
+            <v-alert v-if="memberListError" type="error" dense border="start" class="mb-4">
+              {{ memberListError }}
+            </v-alert>
 
-                        <v-btn color="primary" class="mt-4" @click="goToInvite">Mitglied einladen</v-btn>
-                    </div>
-                </v-card-text>
-            </v-card>
-        </v-container>
-    </v-main>
+            <v-list dense>
+              <v-list-item v-for="member in members" :key="member.user_id">
+                <v-list-item-content>
+                  <v-list-item-title>{{ member.profiles?.username || '-' }}</v-list-item-title>
+                  <v-list-item-subtitle>User-ID: {{ member.user_id }}</v-list-item-subtitle>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list>
+
+            <v-btn color="primary" class="mt-4" @click="goToInvite">Mitglied einladen</v-btn>
+          </div>
+        </v-card-text>
+      </v-card>
+    </v-container>
+  </v-main>
 </template>
 
 <script setup>
@@ -53,7 +51,9 @@ const memberListError = ref('')
 
 async function fetchMyTeam() {
   loading.value = true
-  const { data: { user } } = await supabase.auth.getUser()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
   if (!user) {
     loading.value = false
     return
@@ -78,7 +78,7 @@ async function fetchMyTeam() {
 
   // Hole Mitglieder über Supabase Function
   const { data, error } = await supabase.functions.invoke('Get-team-Members', {
-    body: { teamId: teamData.id }
+    body: { teamId: teamData.id },
   })
   if (error) {
     members.value = []

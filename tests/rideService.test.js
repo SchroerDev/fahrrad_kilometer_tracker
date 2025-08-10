@@ -5,18 +5,18 @@ import { validateRideData, createStartPointGeometry, createRide } from '../src/s
 vi.mock('../src/supabaseClient', () => ({
   supabase: {
     from: vi.fn(() => ({
-      insert: vi.fn()
-    }))
-  }
+      insert: vi.fn(),
+    })),
+  },
 }))
 
 describe('Ride Service', () => {
   describe('validateRideData', () => {
     it('should return valid for correct ride data', () => {
       const rideData = {
-        lat: 52.5200,
-        lng: 13.4050,
-        km: 5
+        lat: 52.52,
+        lng: 13.405,
+        km: 5,
       }
 
       const result = validateRideData(rideData)
@@ -28,7 +28,7 @@ describe('Ride Service', () => {
       const rideData = {
         lat: null,
         lng: null,
-        km: 5
+        km: 5,
       }
 
       const result = validateRideData(rideData)
@@ -40,8 +40,8 @@ describe('Ride Service', () => {
     it('should return invalid when latitude is missing', () => {
       const rideData = {
         lat: null,
-        lng: 13.4050,
-        km: 5
+        lng: 13.405,
+        km: 5,
       }
 
       const result = validateRideData(rideData)
@@ -52,9 +52,9 @@ describe('Ride Service', () => {
 
     it('should return invalid when longitude is missing', () => {
       const rideData = {
-        lat: 52.5200,
+        lat: 52.52,
         lng: null,
-        km: 5
+        km: 5,
       }
 
       const result = validateRideData(rideData)
@@ -65,9 +65,9 @@ describe('Ride Service', () => {
 
     it('should return invalid when km is missing', () => {
       const rideData = {
-        lat: 52.5200,
-        lng: 13.4050,
-        km: null
+        lat: 52.52,
+        lng: 13.405,
+        km: null,
       }
 
       const result = validateRideData(rideData)
@@ -78,9 +78,9 @@ describe('Ride Service', () => {
 
     it('should return invalid when km is less than 2', () => {
       const rideData = {
-        lat: 52.5200,
-        lng: 13.4050,
-        km: 1
+        lat: 52.52,
+        lng: 13.405,
+        km: 1,
       }
 
       const result = validateRideData(rideData)
@@ -91,9 +91,9 @@ describe('Ride Service', () => {
 
     it('should return valid when km is exactly 2', () => {
       const rideData = {
-        lat: 52.5200,
-        lng: 13.4050,
-        km: 2
+        lat: 52.52,
+        lng: 13.405,
+        km: 2,
       }
 
       const result = validateRideData(rideData)
@@ -104,8 +104,8 @@ describe('Ride Service', () => {
 
   describe('createStartPointGeometry', () => {
     it('should create correct PostGIS POINT geometry string', () => {
-      const lng = 13.4050
-      const lat = 52.5200
+      const lng = 13.405
+      const lat = 52.52
 
       const result = createStartPointGeometry(lng, lat)
 
@@ -140,9 +140,9 @@ describe('Ride Service', () => {
     it('should successfully create a ride with valid data', async () => {
       // Arrange
       const rideData = {
-        lat: 52.5200,
-        lng: 13.4050,
-        km: 10
+        lat: 52.52,
+        lng: 13.405,
+        km: 10,
       }
       const userId = 'test-user-id'
 
@@ -157,19 +157,21 @@ describe('Ride Service', () => {
       // Assert
       expect(result.success).toBe(true)
       expect(supabase.from).toHaveBeenCalledWith('rides')
-      expect(mockInsert).toHaveBeenCalledWith([{
-        user_id: userId,
-        km: 10,
-        StartPoint: 'SRID=4326;POINT(13.405 52.52)'
-      }])
+      expect(mockInsert).toHaveBeenCalledWith([
+        {
+          user_id: userId,
+          km: 10,
+          StartPoint: 'SRID=4326;POINT(13.405 52.52)',
+        },
+      ])
     })
 
     it('should fail when user is not authenticated', async () => {
       // Arrange
       const rideData = {
-        lat: 52.5200,
-        lng: 13.4050,
-        km: 10
+        lat: 52.52,
+        lng: 13.405,
+        km: 10,
       }
       const userId = null
 
@@ -190,7 +192,7 @@ describe('Ride Service', () => {
       const rideData = {
         lat: null,
         lng: null,
-        km: 1
+        km: 1,
       }
       const userId = 'test-user-id'
 
@@ -209,9 +211,9 @@ describe('Ride Service', () => {
     it('should handle database error', async () => {
       // Arrange
       const rideData = {
-        lat: 52.5200,
-        lng: 13.4050,
-        km: 15
+        lat: 52.52,
+        lng: 13.405,
+        km: 15,
       }
       const userId = 'test-user-id'
       const dbError = { message: 'Database connection failed' }
@@ -233,9 +235,9 @@ describe('Ride Service', () => {
     it('should convert km to integer when saving', async () => {
       // Arrange
       const rideData = {
-        lat: 52.5200,
-        lng: 13.4050,
-        km: '25' // String value
+        lat: 52.52,
+        lng: 13.405,
+        km: '25', // String value
       }
       const userId = 'test-user-id'
 
@@ -249,19 +251,21 @@ describe('Ride Service', () => {
 
       // Assert
       expect(result.success).toBe(true)
-      expect(mockInsert).toHaveBeenCalledWith([{
-        user_id: userId,
-        km: 25, // Should be converted to integer
-        StartPoint: 'SRID=4326;POINT(13.405 52.52)'
-      }])
+      expect(mockInsert).toHaveBeenCalledWith([
+        {
+          user_id: userId,
+          km: 25, // Should be converted to integer
+          StartPoint: 'SRID=4326;POINT(13.405 52.52)',
+        },
+      ])
     })
 
     it('should create ride with exact test data values', async () => {
       // Arrange - Specific test data for acceptance criteria
       const testRideData = {
         lat: 51.1657, // Göttingen latitude
-        lng: 10.4515, // Göttingen longitude  
-        km: 12
+        lng: 10.4515, // Göttingen longitude
+        km: 12,
       }
       const testUserId = 'test-user-uuid-12345'
 
@@ -275,12 +279,12 @@ describe('Ride Service', () => {
 
       // Assert - Verify stored values match test data
       expect(result.success).toBe(true)
-      
+
       const insertCall = mockInsert.mock.calls[0][0][0]
       expect(insertCall.user_id).toBe(testUserId)
       expect(insertCall.km).toBe(12)
       expect(insertCall.StartPoint).toBe('SRID=4326;POINT(10.4515 51.1657)')
-      
+
       // Verify the function was called with correct parameters
       expect(supabase.from).toHaveBeenCalledWith('rides')
       expect(mockInsert).toHaveBeenCalledTimes(1)

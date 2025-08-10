@@ -35,7 +35,12 @@
 
             <p>
               <strong>Team:</strong> {{ teamName }}
-              <v-btn v-if="teamName !== 'Kein Team'" color="warning" class="ml-4" @click="leaveTeam">
+              <v-btn
+                v-if="teamName !== 'Kein Team'"
+                color="warning"
+                class="ml-4"
+                @click="leaveTeam"
+              >
                 Team verlassen
               </v-btn>
             </p>
@@ -66,7 +71,8 @@
         <v-card>
           <v-card-title class="text-h5">Account löschen?</v-card-title>
           <v-card-text>
-            Bist du sicher, dass du deinen Account unwiderruflich löschen möchtest? Alle deine Daten gehen dabei verloren.
+            Bist du sicher, dass du deinen Account unwiderruflich löschen möchtest? Alle deine Daten
+            gehen dabei verloren.
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
@@ -75,11 +81,9 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
-
     </v-container>
   </v-main>
 </template>
-
 
 <script setup>
 import { ref, onMounted } from 'vue'
@@ -99,71 +103,71 @@ const deleteDialog = ref(false)
 
 // Nach Laden des Profils Username ins Eingabefeld übernehmen
 const fetchProfile = async () => {
-    const { data: { user }, error: userError } = await supabase.auth.getUser()
-    if (userError || !user) {
-        error.value = 'Nicht eingeloggt.'
-        return
-    }
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser()
+  if (userError || !user) {
+    error.value = 'Nicht eingeloggt.'
+    return
+  }
 
-    // Prüfen, ob E-Mail bestätigt ist
-    emailConfirmed.value = user.email_confirmed_at !== null
+  // Prüfen, ob E-Mail bestätigt ist
+  emailConfirmed.value = user.email_confirmed_at !== null
 
-    const { data: profileData, error: profileError } = await supabase
-        .from('profiles')
-        .select('username')
-        .eq('id', user.id)
-        .single()
+  const { data: profileData, error: profileError } = await supabase
+    .from('profiles')
+    .select('username')
+    .eq('id', user.id)
+    .single()
 
-    if (profileError) {
-        error.value = 'Profil nicht gefunden.'
-        return
-    }
+  if (profileError) {
+    error.value = 'Profil nicht gefunden.'
+    return
+  }
 
-    profile.value = profileData
-    editUsername.value = profileData.username
+  profile.value = profileData
+  editUsername.value = profileData.username
 
-    const { data: memberData } = await supabase
-        .from('members')
-        .select('team_id')
-        .eq('user_id', user.id)
-        .single()
+  const { data: memberData } = await supabase
+    .from('members')
+    .select('team_id')
+    .eq('user_id', user.id)
+    .single()
 
-        
+  if (memberData && memberData.team_id) {
+    memberId.value = memberData.id
+    const { data: teamData } = await supabase
+      .from('teams')
+      .select('name')
+      .eq('id', memberData.team_id)
+      .single()
 
-    if (memberData && memberData.team_id) {
-        memberId.value = memberData.id
-        const { data: teamData } = await supabase
-            .from('teams')
-            .select('name')
-            .eq('id', memberData.team_id)
-            .single()
-
-        if (teamData && teamData.name) {
-            teamName.value = teamData.name
-        } else {
-            teamName.value = 'Kein Team'
-        }
+    if (teamData && teamData.name) {
+      teamName.value = teamData.name
     } else {
-        memberId.value = null
-        teamName.value = 'Kein Team'
+      teamName.value = 'Kein Team'
     }
+  } else {
+    memberId.value = null
+    teamName.value = 'Kein Team'
+  }
 
-    // Fahrten laden
-    const { data: ridesData } = await supabase
-      .from('rides')
-      .select('id, created_at, km')
-      .eq('user_id', user.id)
-      .order('created_at', { ascending: false })
+  // Fahrten laden
+  const { data: ridesData } = await supabase
+    .from('rides')
+    .select('id, created_at, km')
+    .eq('user_id', user.id)
+    .order('created_at', { ascending: false })
 
-    rides.value = ridesData || []
+  rides.value = ridesData || []
 }
 
 async function leaveTeam() {
-  if (!memberId.value) return
-  const { error: leaveError } = await supabase
-    .from('members')
-    .delete()
-    .eq('id', memberId.value)
+  if (!memberId.value) {
+    return
+  }
+  const { error: leaveError } = await supabase.from('members').delete().eq('id', memberId.value)
   if (leaveError) {
     error.value = 'Fehler beim Verlassen des Teams: ' + leaveError.message
   } else {
@@ -187,9 +191,11 @@ async function deleteAccount() {
   error.value = null
   success.value = null
   // Hier solltest du eine eigene Edge Function aufrufen, die den User löscht!
-  const { data: { user } } = await supabase.auth.getUser()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
   const { error: funcError } = await supabase.functions.invoke('delete-user', {
-    body: { userId: user.id }
+    body: { userId: user.id },
   })
   if (funcError) {
     error.value = 'Fehler beim Löschen des Accounts: ' + funcError.message
@@ -207,7 +213,9 @@ function confirmDeleteAccount() {
 async function updateUsername() {
   usernameError.value = ''
   usernameSuccess.value = ''
-  const { data: { user } } = await supabase.auth.getUser()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
   if (!user) {
     usernameError.value = 'Nicht eingeloggt.'
     return
@@ -230,4 +238,3 @@ async function updateUsername() {
 
 onMounted(fetchProfile)
 </script>
-
