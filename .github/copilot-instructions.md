@@ -4,6 +4,17 @@ A modern Vue 3 + Vite progressive web application for tracking and comparing bic
 
 Always reference these instructions first and fallback to search or bash commands only when you encounter unexpected information that does not match the info here.
 
+## Primary Development Focus
+
+This project primarily supports **bugfixes** and **UI changes**. The key to successful development is understanding and effectively using the different tools integrated into the project:
+
+- **Testing**: `npm run test` (your most important tool - use it frequently)
+- **Linting**: `npm run lint` (catch code quality issues early)
+- **Building**: `npm run build` (verify production readiness)
+- **Development**: `npm run dev` (hot reload for rapid iteration)
+
+**Goal**: Achieve full test coverage across all application functionality. The current test suite provides a foundation, but comprehensive coverage of all components and user flows is highly desirable.
+
 ## Working Effectively
 
 ### Bootstrap and Development Setup
@@ -110,15 +121,19 @@ ALWAYS run through these complete user scenarios after making changes:
 - Always run `npm run preview` and manually test the built application
 - Check that PWA files are generated (`docs/sw.js`, `docs/manifest.webmanifest`)
 
-### Automated Testing Framework
+### Automated Testing Framework (Primary Tool)
 
-- **Run tests**:
+**⭐ MOST IMPORTANT**: `npm run test` is your primary development tool. Use it frequently during development!
+
+- **Run tests in watch mode** (recommended for active development):
   ```bash
   npm run test
   ```
   - Runs Vitest test suite in watch mode
   - Takes ~1.4 seconds
   - 16 tests covering ride service functionality
+  - Automatically re-runs tests when files change
+  - **Use this constantly while developing**
 
 - **Run tests once**:
   ```bash
@@ -126,12 +141,16 @@ ALWAYS run through these complete user scenarios after making changes:
   ```
   - Runs Vitest test suite once (non-watch mode)
   - Takes ~1.4 seconds
+  - Use before commits and in CI
 
 - **Run tests with UI**:
   ```bash
   npm run test:ui
   ```
   - Opens Vitest UI in browser for interactive testing
+  - Great for debugging failing tests and exploring coverage
+
+**Testing Strategy**: Full test coverage is highly desirable. The current test suite provides a solid foundation with comprehensive ride service testing, but expanding coverage to all components, views, and user interactions would significantly improve code quality and development confidence.
 
 ### Code Quality and Linting
 
@@ -242,11 +261,48 @@ supabase/
 
 ## Common Development Tasks
 
-### Adding New Pages
+### Bugfix Workflow
+
+1. **Identify the issue**: Reproduce the bug and understand the expected behavior
+2. **Write/update tests**: Use `npm run test` to create tests that demonstrate the bug
+3. **Run tests**: Verify the test fails (`npm run test:run`)
+4. **Fix the bug**: Make minimal code changes to address the issue
+5. **Validate fix**: Ensure tests pass (`npm run test`)
+6. **Quality check**: Run `npm run lint` and `npm run build`
+7. **Manual validation**: Test the fix in the browser (`npm run dev`)
+
+### UI Changes Workflow
+
+1. **Start development server**: `npm run dev` for hot reload
+2. **Run tests in watch mode**: `npm run test` (keep running during development)
+3. **Make UI changes**: Edit Vue components, CSS, or Vuetify configurations
+4. **Test responsiveness**: Check different screen sizes and devices
+5. **Validate accessibility**: Ensure proper contrast, keyboard navigation
+6. **Run linting**: `npm run lint` to catch styling issues
+7. **Build verification**: `npm run build` and `npm run preview` to test production build
+8. **Write tests**: Add component tests for new UI functionality
+
+### Understanding Project Tools
+
+**Essential Tools Overview**:
+- **Vitest**: Testing framework (`npm run test`) - your primary development tool
+- **ESLint**: Code linting (`npm run lint`) - catches errors and enforces code style
+- **Prettier**: Code formatting (`npm run format`) - consistent code style
+- **Vite**: Build tool and dev server (`npm run dev`, `npm run build`)
+- **Vue 3**: Frontend framework with Composition API
+- **Vuetify 3**: Material Design UI components
+- **Supabase**: Backend database, auth, and real-time features
+
+**Tool Integration**: All tools work together seamlessly. The test suite validates functionality, ESLint ensures code quality, Prettier maintains formatting consistency, and Vite provides fast development and production builds.
+
+### Adding New Pages (UI Development)
 
 1. Create Vue component in `src/views/`
 2. Add route in `src/router/index.js`
-3. Test navigation in development server
+3. **Write tests**: Add component tests for new page functionality
+4. **Test development**: Use `npm run test` while developing
+5. Test navigation in development server (`npm run dev`)
+6. **Quality check**: Run `npm run lint` and `npm run build`
 
 ### Database Changes
 
@@ -254,11 +310,16 @@ supabase/
 2. Test with local Supabase: `./supabase db reset`
 3. Apply to production via Supabase dashboard
 
-### Styling Changes
+### Styling Changes (UI Development)
 
 - Uses Vuetify theming system (configured in `src/main.js`)
 - Custom CSS in `src/style.css`
 - Material Design Icons available via `@mdi/font`
+- **Development workflow**: 
+  1. Use `npm run dev` for hot reload while styling
+  2. Keep `npm run test` running to catch any regressions
+  3. Run `npm run lint` to validate CSS and component structure
+  4. Test responsive design on different screen sizes
 
 ### Environment Variables
 
@@ -302,4 +363,4 @@ VITE_SUPABASE_FUNCTIONS_URL=https://XXXXXXXXXXXXXXXXX.supabase.co/functions/v1
 - Enable necessary OAuth providers in Supabase Auth settings
 - Configure email templates for user invitations
 
-This application is fully functional for development and can be built/deployed successfully. Always test complete user flows manually after making changes since there are no automated tests.
+This application is fully functional for development and can be built/deployed successfully. The comprehensive testing framework, linting tools, and development setup support efficient bugfix and UI development workflows. Use `npm run test` as your primary development tool to ensure code quality and catch regressions early.
