@@ -18,7 +18,7 @@
             disable-pagination
             hide-default-footer
           >
-            <template #item.name="{ item }">
+            <template #[`item.name`]="{ item }">
               <div>
                 <router-link v-if="item.id === myTeamId" :to="'/my-team'" class="my-team-link">
                   <strong>{{ item.name }}</strong>
@@ -29,7 +29,7 @@
                 </v-chip>
               </div>
             </template>
-            <template #item.rank="{ index }"> #{{ index + 1 }} </template>
+            <template #[`item.rank`]="{ index }"> #{{ index + 1 }} </template>
           </v-data-table>
 
           <!-- Mobile-Karten -->

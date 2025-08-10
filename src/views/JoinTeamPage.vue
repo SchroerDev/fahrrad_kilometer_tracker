@@ -38,7 +38,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { supabase } from '../supabaseClient'
 
 const route = useRoute()
-const router = useRouter()
+const _router = useRouter()
 const loading = ref(true)
 const success = ref(false)
 const error = ref('')
