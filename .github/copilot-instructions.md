@@ -10,12 +10,15 @@ Always reference these instructions first and fallback to search or bash command
 
 - **Node.js Requirements**: Node.js >=18 (v20.19.4 validated)
 - **Install dependencies**:
+
   ```bash
   npm install
   ```
 
-  - Takes ~1 minute 15 seconds. NEVER CANCEL. Set timeout to 3+ minutes.
+  - Takes ~2 minutes 20 seconds. NEVER CANCEL. Set timeout to 5+ minutes.
+
 - **Environment setup**:
+
   ```bash
   cp .env.example .env
   ```
@@ -25,6 +28,7 @@ Always reference these instructions first and fallback to search or bash command
 ### Build and Development Commands
 
 - **Development server**:
+
   ```bash
   npm run dev
   ```
@@ -32,7 +36,9 @@ Always reference these instructions first and fallback to search or bash command
   - Starts Vite dev server on `http://localhost:5173/fahrrad_kilometer_tracker/`
   - Ready in ~300ms
   - Hot reload enabled for all Vue/JS/CSS changes
+
 - **Production build**:
+
   ```bash
   npm run build
   ```
@@ -41,7 +47,9 @@ Always reference these instructions first and fallback to search or bash command
   - Outputs to `docs/` directory (configured for GitHub Pages)
   - Creates PWA service worker and manifest files
   - May show warnings about large chunks (normal, can be ignored)
+
 - **Preview production build**:
+
   ```bash
   npm run preview
   ```
@@ -56,6 +64,7 @@ Always reference these instructions first and fallback to search or bash command
   curl -fsSL https://github.com/supabase/cli/releases/download/v2.30.4/supabase_linux_amd64.tar.gz | tar -xz
   ```
 - **Start local Supabase stack**:
+
   ```bash
   ./supabase start
   ```
@@ -64,6 +73,7 @@ Always reference these instructions first and fallback to search or bash command
   - Requires Docker to be running
   - Provides local database, auth, API, and studio on various ports (54321-54327)
   - **CRITICAL**: Wait for complete initialization before proceeding
+
 - **Stop local Supabase**:
   ```bash
   ./supabase stop
@@ -100,11 +110,61 @@ ALWAYS run through these complete user scenarios after making changes:
 - Always run `npm run preview` and manually test the built application
 - Check that PWA files are generated (`docs/sw.js`, `docs/manifest.webmanifest`)
 
-### No Automated Tests
+### Automated Testing Framework
 
-- This repository has NO automated testing framework
-- NO linting or formatting tools configured
-- Manual validation is the only testing method
+- **Run tests**:
+  ```bash
+  npm run test
+  ```
+  - Runs Vitest test suite in watch mode
+  - Takes ~1.4 seconds
+  - 16 tests covering ride service functionality
+
+- **Run tests once**:
+  ```bash
+  npm run test:run
+  ```
+  - Runs Vitest test suite once (non-watch mode)
+  - Takes ~1.4 seconds
+
+- **Run tests with UI**:
+  ```bash
+  npm run test:ui
+  ```
+  - Opens Vitest UI in browser for interactive testing
+
+### Code Quality and Linting
+
+- **Run ESLint**:
+  ```bash
+  npm run lint
+  ```
+  - Takes ~1.6 seconds
+  - Checks all .js, .vue, and .mjs files
+  - Currently finds 5 errors and 1 warning that need fixing
+
+- **Auto-fix ESLint issues**:
+  ```bash
+  npm run lint:fix
+  ```
+  - Automatically fixes ESLint issues where possible
+
+- **Format code with Prettier**:
+  ```bash
+  npm run format
+  ```
+  - Takes ~8 seconds
+  - Formats all files according to .prettierrc configuration
+
+### CI/CD Validation
+
+- **CRITICAL**: Always run these commands before committing to ensure CI passes:
+  ```bash
+  npm run lint
+  npm run test:run
+  npm run build
+  ```
+- The GitHub Actions workflow (.github/workflows/eslint.yml) will fail if linting errors exist
 
 ## Project Structure and Key Files
 
@@ -125,9 +185,19 @@ src/
 ```
 package.json             # Dependencies and npm scripts
 vite.config.js          # Vite build configuration with PWA
+vitest.config.js        # Vitest test configuration
+eslint.config.js        # ESLint linting configuration
+.prettierrc             # Prettier formatting configuration
 jsconfig.json           # JavaScript project configuration
 .env.example            # Environment variables template
 .vscode/extensions.json  # Recommended VSCode extensions (Deno)
+```
+
+### Test Files
+
+```
+tests/
+└── rideService.test.js  # Comprehensive tests for ride service (16 tests)
 ```
 
 ### Supabase Configuration

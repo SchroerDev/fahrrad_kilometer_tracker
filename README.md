@@ -1,143 +1,183 @@
-# Fahrrad Kilometer Tracker 🚴
+# Supabase CLI
 
-Dieses Projekt ist eine moderne Vue 3 + Vite Anwendung zum Verwalten und Vergleichen von gefahrenen Fahrradkilometern in Teams.  
-Es dient als Beispiel- und Lernprojekt, um Supabase als Backend (Datenbank, Auth, Edge Functions) in einer echten Anwendung auszuprobieren.
+[![Coverage Status](https://coveralls.io/repos/github/supabase/cli/badge.svg?branch=main)](https://coveralls.io/github/supabase/cli?branch=main) [![Bitbucket Pipelines](https://img.shields.io/bitbucket/pipelines/supabase-cli/setup-cli/master?style=flat-square&label=Bitbucket%20Canary)](https://bitbucket.org/supabase-cli/setup-cli/pipelines) [![Gitlab Pipeline Status](https://img.shields.io/gitlab/pipeline-status/sweatybridge%2Fsetup-cli?label=Gitlab%20Canary)
+](https://gitlab.com/sweatybridge/setup-cli/-/pipelines)
 
-## Features
+[Supabase](https://supabase.io) is an open source Firebase alternative. We're building the features of Firebase using enterprise-grade open source tools.
 
-- Nutzer-Registrierung und Login (Supabase Auth)
-- Teams erstellen, beitreten und Teamübersicht
-- Fahrten/Kilometer erfassen und Teamstatistiken sehen
-- Mitgliederverwaltung im Team (inkl. E-Mail-Einladung und Beitrittslink)
-- Supabase Edge Functions für sichere Teamabfragen und E-Mail-Einladungen
-- Deployment-ready für GitHub Pages (statisches Hosting)
+This repository contains all the functionality for Supabase CLI.
 
-## Motivation
+- [x] Running Supabase locally
+- [x] Managing database migrations
+- [x] Creating and deploying Supabase Functions
+- [x] Generating types directly from your database schema
+- [x] Making authenticated HTTP requests to [Management API](https://supabase.com/docs/reference/api/introduction)
 
-Das Projekt entstand, um Supabase als Open-Source-Alternative zu Firebase in einer echten Team-App zu testen.  
-Es zeigt, wie man Auth, Datenbank, Policies und Edge Functions in einer Vue-App integriert.
+## Getting started
 
-## Lokale Entwicklung
+### Install the CLI
 
-### Voraussetzungen
+Available via [NPM](https://www.npmjs.com) as dev dependency. To install:
 
-- Node.js (empfohlen: >=18)
-- Ein Supabase-Projekt (kostenlos auf [supabase.com](https://supabase.com))
-
-### Setup
-
-1. **Repository klonen**
-   ```sh
-   git clone https://github.com/dein-github-user/fahrrad_kilometer_tracker.git
-   cd fahrrad_kilometer_tracker
-   ```
-2. **Abhängigkeiten installieren**
-   ```sh
-   npm install
-   ```
-3. **Umgebungsvariablen einrichten**
-   - `.env` Datei von `.env.example` kopieren
-   - Supabase URL und anon Schlüssel eintragen
-4. **Entwicklungsserver starten**
-   ```sh
-   npm run dev
-   ```
-
-   - Browser öffnen und zu `http://localhost:5173` navigieren
-
-## Code-Qualität
-
-### ESLint und Prettier
-
-Das Projekt verwendet ESLint für die Code-Analyse und Prettier für einheitliche Formatierung.
-
-**Verfügbare Kommandos:**
-
-```sh
-# Code prüfen
-npm run lint
-
-# Automatische Fehlerbehebung (wo möglich)
-npm run lint:fix
-
-# Code formatieren
-npm run format
+```bash
+npm i supabase --save-dev
 ```
 
-**ESLint Konfiguration:**
-- Vue 3 Composition API Unterstützung
-- Moderne JavaScript Standards (ES2022+)
-- Vue-spezifische Regeln (eslint-plugin-vue)
-- Prettier Integration für Formatierung
+To install the beta release channel:
 
-**Beispiel ESLint-Ausgabe:**
-```
-/src/views/TeamsPage.vue
-  21:29  error  'v-slot' directive doesn't support any modifier  vue/valid-v-slot
-  32:29  error  'v-slot' directive doesn't support any modifier  vue/valid-v-slot
-
-/src/main.js
-  17:43  error  'session' is defined but never used  no-unused-vars
-
-✖ 3 problems (3 errors, 0 warnings)
-  0 errors and 0 warnings potentially fixable with the --fix option.
+```bash
+npm i supabase@beta --save-dev
 ```
 
-## Produktion
+When installing with yarn 4, you need to disable experimental fetch with the following nodejs config.
 
-- **Build erstellen**
+```
+NODE_OPTIONS=--no-experimental-fetch yarn add supabase
+```
+
+> **Note**
+For Bun versions below v1.0.17, you must add `supabase` as a [trusted dependency](https://bun.sh/guides/install/trusted) before running `bun add -D supabase`.
+
+<details>
+  <summary><b>macOS</b></summary>
+
+  Available via [Homebrew](https://brew.sh). To install:
+
   ```sh
-  npm run build
+  brew install supabase/tap/supabase
   ```
 
-  - Der statische Code befindet sich im `docs` Verzeichnis (für GitHub Pages optimiert)
-- **Automatische Build Pipeline**
-  - Bei Push auf den `main` Branch wird automatisch `npm run build` ausgeführt
-  - Die Build-Ergebnisse werden automatisch in das `docs` Verzeichnis committed
-  - GitHub Actions Workflow in `.github/workflows/build.yml`
-- **GitHub Pages Deployment**
-  - `docs` Verzeichnis als GitHub Pages Quelle in den Repository-Einstellungen festlegen
-  - Beispiel-Deployment: [fahrrad-kilometer-tracker.dein-github-user.github.io](https://fahrrad-kilometer-tracker.dein-github-user.github.io)
+  To install the beta release channel:
+  
+  ```sh
+  brew install supabase/tap/supabase-beta
+  brew link --overwrite supabase-beta
+  ```
+  
+  To upgrade:
 
-## Supabase Einstellungen
+  ```sh
+  brew upgrade supabase
+  ```
+</details>
 
-- **Datenbank**
-  - Tabelle: `profiles`
-    - Spalten: `id`, `username`, `avatar_url`, `created_at`
-  - Tabelle: `rides`
-    - Spalten: `id`, `user_id`, `distance`, `date`, `created_at`
-  - Tabelle: `teams`
-    - Spalten: `id`, `name`, `created_at`
-  - Tabelle: `team_members`
-    - Spalten: `id`, `team_id`, `user_id`, `role`, `invitation_sent_at`, `joined_at`
-- **Rollen und Berechtigungen**
-  - `authenticated` Rolle für registrierte Nutzer
-  - `anon` Rolle für Gäste (eingeschränkter Zugriff)
-- **Edge Functions**
-  - `invite_member`: Für das Einladen von Mitgliedern per E-Mail
-  - `join_team`: Für den Beitritt zu einem Team über einen Link
+<details>
+  <summary><b>Windows</b></summary>
 
-## Technologien
+  Available via [Scoop](https://scoop.sh). To install:
 
-- **Frontend:** Vue 3, Vite, Pinia, Vue Router, Tailwind CSS
-- **Backend:** Supabase (PostgreSQL, Auth, Edge Functions)
-- **Deployment:** GitHub Pages, Supabase
+  ```powershell
+  scoop bucket add supabase https://github.com/supabase/scoop-bucket.git
+  scoop install supabase
+  ```
 
-## Mitwirken
+  To upgrade:
 
-Beiträge sind willkommen!  
-Bitte Issue erstellen oder Pull Request einreichen.
+  ```powershell
+  scoop update supabase
+  ```
+</details>
 
-### Code Agent Unterstützung
+<details>
+  <summary><b>Linux</b></summary>
 
-Dieses Projekt unterstützt automatische Issue-Bearbeitung durch Code Agents.  
-Der Code Agent kann Issues analysieren und entsprechende Lösungen implementieren.
+  Available via [Homebrew](https://brew.sh) and Linux packages.
 
-## Lizenz
+  #### via Homebrew
 
-MIT Lizenz. Siehe Datei [LICENSE](LICENSE) für Details.
+  To install:
 
----
+  ```sh
+  brew install supabase/tap/supabase
+  ```
 
-**Hinweis:** Dies ist ein fiktives Projekt für Demonstrationszwecke.  
-Die beschriebenen Funktionen und Technologien dienen nur zur Veranschaulichung.
+  To upgrade:
+
+  ```sh
+  brew upgrade supabase
+  ```
+
+  #### via Linux packages
+
+  Linux packages are provided in [Releases](https://github.com/supabase/cli/releases). To install, download the `.apk`/`.deb`/`.rpm`/`.pkg.tar.zst` file depending on your package manager and run the respective commands.
+
+  ```sh
+  sudo apk add --allow-untrusted <...>.apk
+  ```
+
+  ```sh
+  sudo dpkg -i <...>.deb
+  ```
+
+  ```sh
+  sudo rpm -i <...>.rpm
+  ```
+
+  ```sh
+  sudo pacman -U <...>.pkg.tar.zst
+  ```
+</details>
+
+<details>
+  <summary><b>Other Platforms</b></summary>
+
+  You can also install the CLI via [go modules](https://go.dev/ref/mod#go-install) without the help of package managers.
+
+  ```sh
+  go install github.com/supabase/cli@latest
+  ```
+
+  Add a symlink to the binary in `$PATH` for easier access:
+
+  ```sh
+  ln -s "$(go env GOPATH)/bin/cli" /usr/bin/supabase
+  ```
+
+  This works on other non-standard Linux distros.
+</details>
+
+<details>
+  <summary><b>Community Maintained Packages</b></summary>
+
+  Available via [pkgx](https://pkgx.sh/). Package script [here](https://github.com/pkgxdev/pantry/blob/main/projects/supabase.com/cli/package.yml).
+  To install in your working directory:
+
+  ```bash
+  pkgx install supabase
+  ```
+
+  Available via [Nixpkgs](https://nixos.org/). Package script [here](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/tools/supabase-cli/default.nix).
+</details>
+
+### Run the CLI
+
+```bash
+supabase bootstrap
+```
+
+Or using npx:
+
+```bash
+npx supabase bootstrap
+```
+
+The bootstrap command will guide you through the process of setting up a Supabase project using one of the [starter](https://github.com/supabase-community/supabase-samples/blob/main/samples.json) templates.
+
+## Docs
+
+Command & config reference can be found [here](https://supabase.com/docs/reference/cli/about).
+
+## Breaking changes
+
+We follow semantic versioning for changes that directly impact CLI commands, flags, and configurations.
+
+However, due to dependencies on other service images, we cannot guarantee that schema migrations, seed.sql, and generated types will always work for the same CLI major version. If you need such guarantees, we encourage you to pin a specific version of CLI in package.json.
+
+## Developing
+
+To run from source:
+
+```sh
+# Go >= 1.22
+go run . help
+```
