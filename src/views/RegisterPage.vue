@@ -76,7 +76,7 @@ const password = ref('')
 const username = ref('')
 const error = ref(null)
 const success = ref(null)
-const router = useRouter()
+const _router = useRouter()
 
 async function register() {
   error.value = null

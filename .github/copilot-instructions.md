@@ -4,18 +4,32 @@ A modern Vue 3 + Vite progressive web application for tracking and comparing bic
 
 Always reference these instructions first and fallback to search or bash commands only when you encounter unexpected information that does not match the info here.
 
+## Primary Development Focus
+
+This project primarily supports **bugfixes** and **UI changes**. The key to successful development is understanding and effectively using the different tools integrated into the project:
+
+- **Testing**: `npm run test` (your most important tool - use it frequently)
+- **Linting**: `npm run lint` (catch code quality issues early)
+- **Building**: `npm run build` (verify production readiness)
+- **Development**: `npm run dev` (hot reload for rapid iteration)
+
+**Goal**: Achieve full test coverage across all application functionality. The current test suite provides a foundation, but comprehensive coverage of all components and user flows is highly desirable.
+
 ## Working Effectively
 
 ### Bootstrap and Development Setup
 
 - **Node.js Requirements**: Node.js >=18 (v20.19.4 validated)
 - **Install dependencies**:
+
   ```bash
   npm install
   ```
 
-  - Takes ~1 minute 15 seconds. NEVER CANCEL. Set timeout to 3+ minutes.
+  - Takes ~2 minutes 20 seconds. NEVER CANCEL. Set timeout to 5+ minutes.
+
 - **Environment setup**:
+
   ```bash
   cp .env.example .env
   ```
@@ -25,6 +39,7 @@ Always reference these instructions first and fallback to search or bash command
 ### Build and Development Commands
 
 - **Development server**:
+
   ```bash
   npm run dev
   ```
@@ -32,7 +47,9 @@ Always reference these instructions first and fallback to search or bash command
   - Starts Vite dev server on `http://localhost:5173/fahrrad_kilometer_tracker/`
   - Ready in ~300ms
   - Hot reload enabled for all Vue/JS/CSS changes
+
 - **Production build**:
+
   ```bash
   npm run build
   ```
@@ -41,7 +58,9 @@ Always reference these instructions first and fallback to search or bash command
   - Outputs to `docs/` directory (configured for GitHub Pages)
   - Creates PWA service worker and manifest files
   - May show warnings about large chunks (normal, can be ignored)
+
 - **Preview production build**:
+
   ```bash
   npm run preview
   ```
@@ -56,6 +75,7 @@ Always reference these instructions first and fallback to search or bash command
   curl -fsSL https://github.com/supabase/cli/releases/download/v2.30.4/supabase_linux_amd64.tar.gz | tar -xz
   ```
 - **Start local Supabase stack**:
+
   ```bash
   ./supabase start
   ```
@@ -64,6 +84,7 @@ Always reference these instructions first and fallback to search or bash command
   - Requires Docker to be running
   - Provides local database, auth, API, and studio on various ports (54321-54327)
   - **CRITICAL**: Wait for complete initialization before proceeding
+
 - **Stop local Supabase**:
   ```bash
   ./supabase stop
@@ -100,11 +121,69 @@ ALWAYS run through these complete user scenarios after making changes:
 - Always run `npm run preview` and manually test the built application
 - Check that PWA files are generated (`docs/sw.js`, `docs/manifest.webmanifest`)
 
-### No Automated Tests
+### Automated Testing Framework (Primary Tool)
 
-- This repository has NO automated testing framework
-- NO linting or formatting tools configured
-- Manual validation is the only testing method
+**⭐ MOST IMPORTANT**: `npm run test` is your primary development tool. Use it frequently during development!
+
+- **Run tests in watch mode** (recommended for active development):
+  ```bash
+  npm run test
+  ```
+  - Runs Vitest test suite in watch mode
+  - Takes ~1.4 seconds
+  - 16 tests covering ride service functionality
+  - Automatically re-runs tests when files change
+  - **Use this constantly while developing**
+
+- **Run tests once**:
+  ```bash
+  npm run test:run
+  ```
+  - Runs Vitest test suite once (non-watch mode)
+  - Takes ~1.4 seconds
+  - Use before commits and in CI
+
+- **Run tests with UI**:
+  ```bash
+  npm run test:ui
+  ```
+  - Opens Vitest UI in browser for interactive testing
+  - Great for debugging failing tests and exploring coverage
+
+**Testing Strategy**: Full test coverage is highly desirable. The current test suite provides a solid foundation with comprehensive ride service testing, but expanding coverage to all components, views, and user interactions would significantly improve code quality and development confidence.
+
+### Code Quality and Linting
+
+- **Run ESLint**:
+  ```bash
+  npm run lint
+  ```
+  - Takes ~1.6 seconds
+  - Checks all .js, .vue, and .mjs files
+  - Currently finds 5 errors and 1 warning that need fixing
+
+- **Auto-fix ESLint issues**:
+  ```bash
+  npm run lint:fix
+  ```
+  - Automatically fixes ESLint issues where possible
+
+- **Format code with Prettier**:
+  ```bash
+  npm run format
+  ```
+  - Takes ~8 seconds
+  - Formats all files according to .prettierrc configuration
+
+### CI/CD Validation
+
+- **CRITICAL**: Always run these commands before committing to ensure CI passes:
+  ```bash
+  npm run lint
+  npm run test:run
+  npm run build
+  ```
+- The GitHub Actions workflow (.github/workflows/eslint.yml) will fail if linting errors exist
 
 ## Project Structure and Key Files
 
@@ -125,9 +204,19 @@ src/
 ```
 package.json             # Dependencies and npm scripts
 vite.config.js          # Vite build configuration with PWA
+vitest.config.js        # Vitest test configuration
+eslint.config.js        # ESLint linting configuration
+.prettierrc             # Prettier formatting configuration
 jsconfig.json           # JavaScript project configuration
 .env.example            # Environment variables template
 .vscode/extensions.json  # Recommended VSCode extensions (Deno)
+```
+
+### Test Files
+
+```
+tests/
+└── rideService.test.js  # Comprehensive tests for ride service (16 tests)
 ```
 
 ### Supabase Configuration
@@ -172,11 +261,48 @@ supabase/
 
 ## Common Development Tasks
 
-### Adding New Pages
+### Bugfix Workflow
+
+1. **Identify the issue**: Reproduce the bug and understand the expected behavior
+2. **Write/update tests**: Use `npm run test` to create tests that demonstrate the bug
+3. **Run tests**: Verify the test fails (`npm run test:run`)
+4. **Fix the bug**: Make minimal code changes to address the issue
+5. **Validate fix**: Ensure tests pass (`npm run test`)
+6. **Quality check**: Run `npm run lint` and `npm run build`
+7. **Manual validation**: Test the fix in the browser (`npm run dev`)
+
+### UI Changes Workflow
+
+1. **Start development server**: `npm run dev` for hot reload
+2. **Run tests in watch mode**: `npm run test` (keep running during development)
+3. **Make UI changes**: Edit Vue components, CSS, or Vuetify configurations
+4. **Test responsiveness**: Check different screen sizes and devices
+5. **Validate accessibility**: Ensure proper contrast, keyboard navigation
+6. **Run linting**: `npm run lint` to catch styling issues
+7. **Build verification**: `npm run build` and `npm run preview` to test production build
+8. **Write tests**: Add component tests for new UI functionality
+
+### Understanding Project Tools
+
+**Essential Tools Overview**:
+- **Vitest**: Testing framework (`npm run test`) - your primary development tool
+- **ESLint**: Code linting (`npm run lint`) - catches errors and enforces code style
+- **Prettier**: Code formatting (`npm run format`) - consistent code style
+- **Vite**: Build tool and dev server (`npm run dev`, `npm run build`)
+- **Vue 3**: Frontend framework with Composition API
+- **Vuetify 3**: Material Design UI components
+- **Supabase**: Backend database, auth, and real-time features
+
+**Tool Integration**: All tools work together seamlessly. The test suite validates functionality, ESLint ensures code quality, Prettier maintains formatting consistency, and Vite provides fast development and production builds.
+
+### Adding New Pages (UI Development)
 
 1. Create Vue component in `src/views/`
 2. Add route in `src/router/index.js`
-3. Test navigation in development server
+3. **Write tests**: Add component tests for new page functionality
+4. **Test development**: Use `npm run test` while developing
+5. Test navigation in development server (`npm run dev`)
+6. **Quality check**: Run `npm run lint` and `npm run build`
 
 ### Database Changes
 
@@ -184,11 +310,16 @@ supabase/
 2. Test with local Supabase: `./supabase db reset`
 3. Apply to production via Supabase dashboard
 
-### Styling Changes
+### Styling Changes (UI Development)
 
 - Uses Vuetify theming system (configured in `src/main.js`)
 - Custom CSS in `src/style.css`
 - Material Design Icons available via `@mdi/font`
+- **Development workflow**: 
+  1. Use `npm run dev` for hot reload while styling
+  2. Keep `npm run test` running to catch any regressions
+  3. Run `npm run lint` to validate CSS and component structure
+  4. Test responsive design on different screen sizes
 
 ### Environment Variables
 
@@ -232,4 +363,4 @@ VITE_SUPABASE_FUNCTIONS_URL=https://XXXXXXXXXXXXXXXXX.supabase.co/functions/v1
 - Enable necessary OAuth providers in Supabase Auth settings
 - Configure email templates for user invitations
 
-This application is fully functional for development and can be built/deployed successfully. Always test complete user flows manually after making changes since there are no automated tests.
+This application is fully functional for development and can be built/deployed successfully. The comprehensive testing framework, linting tools, and development setup support efficient bugfix and UI development workflows. Use `npm run test` as your primary development tool to ensure code quality and catch regressions early.

@@ -14,7 +14,7 @@ import './style.css'
 async function init() {
   // Warte auf die Session-Initialisierung
   let sessionChecked = false
-  supabase.auth.onAuthStateChange((event, session) => {
+  supabase.auth.onAuthStateChange((event, _session) => {
     if (
       (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') &&
       router.currentRoute.value.path === '/login'
@@ -32,9 +32,9 @@ async function init() {
 
   // Warte, bis Supabase die Session aus dem URL-Fragment verarbeitet hat
   const {
-    data: { session },
+    data: { session: _session },
   } = await supabase.auth.getSession()
-  if (!session && router.currentRoute.value.path !== '/login') {
+  if (!_session && router.currentRoute.value.path !== '/login') {
     router.replace('/login')
   }
 
