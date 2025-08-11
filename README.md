@@ -141,3 +141,28 @@ MIT Lizenz. Siehe Datei [LICENSE](LICENSE) für Details.
 
 **Hinweis:** Dies ist ein fiktives Projekt für Demonstrationszwecke.  
 Die beschriebenen Funktionen und Technologien dienen nur zur Veranschaulichung.
+
+## Branch-Struktur und Workflow
+
+Das Projekt verwendet einen **zweistufigen Branch-Workflow**:
+
+- **development**:  
+  Der Standard-Branch für aktive Entwicklung.  
+  Alle neuen Features, Bugfixes und Änderungen werden hier entwickelt und getestet.
+
+- **main**:  
+  Der geschützte Produktions-Branch.  
+  Änderungen gelangen ausschließlich über Pull Requests von `development` nach `main` in diesen Branch.  
+  Direkte Commits, Force-Pushes und das Löschen des Branches sind nicht erlaubt.  
+  Vor dem Mergen müssen alle Status Checks (Build, Tests, Linting) erfolgreich sein und mindestens ein Review erfolgt sein.
+
+**Wichtige Hinweise:**
+- Pull Requests von `main` nach `development` sind nicht vorgesehen und werden im Review abgelehnt.
+- Der `main`-Branch ist immer stabil und entspricht dem Stand der produktiven Anwendung.
+- Der Deployment-Workflow baut automatisch aus dem `main`-Branch und deployed auf GitHub Pages.
+
+**Empfohlener Workflow:**
+1. Feature- oder Bugfix-Branch von `development` abzweigen
+2. Nach Fertigstellung Pull Request nach `development`
+3. Nach erfolgreichem Test und Review: Merge in `development`
+4. Für ein Release: Pull Request von `development` nach `main` erstellen und nach erfolgreichem Review mergen

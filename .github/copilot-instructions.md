@@ -15,6 +15,22 @@ This project primarily supports **bugfixes** and **UI changes**. The key to succ
 
 **Goal**: Achieve full test coverage across all application functionality. The current test suite provides a foundation, but comprehensive coverage of all components and user flows is highly desirable.
 
+## Branching Model
+
+- **development** is the default branch for all active development.  
+  All feature branches and bugfixes are branched off from `development` and merged back into `development` after review and testing.
+- **main** is a protected branch.  
+  No direct commits, force-pushes, or branch deletions are allowed.  
+  All changes to `main` must come via Pull Requests from `development` and require successful status checks (build, test, lint) and at least one review.
+- Pull Requests from `main` to `development` are not part of the workflow and should be rejected in code review.
+
+**Recommended workflow:**
+1. Create a feature or bugfix branch from `development`
+2. Work and test locally, using `npm run test` and `npm run lint`
+3. Open a Pull Request to merge into `development`
+4. After review and successful status checks, merge into `development`
+5. For releases, open a Pull Request from `development` to `main` and merge after review and passing checks
+
 ## Working Effectively
 
 ### Bootstrap and Development Setup
