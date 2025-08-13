@@ -1,6 +1,12 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { VitePWA } from 'vite-plugin-pwa'
+import { fileURLToPath } from 'url'
+import { dirname } from 'path'
+import { URL } from 'url'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
 
 export default defineConfig({
   base: '/fahrrad_kilometer_tracker/', // <- wichtig für GitHub Pages!
@@ -37,4 +43,14 @@ export default defineConfig({
       },
     }),
   ],
+  resolve: {
+    alias: {
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
+    },
+  },
+  test: {
+    setupFiles: ['./tests/setup.js'],
+    environment: 'jsdom',
+    globals: true,
+  },
 })

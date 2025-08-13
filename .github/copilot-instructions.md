@@ -25,6 +25,7 @@ This project primarily supports **bugfixes** and **UI changes**. The key to succ
 - Pull Requests from `main` to `development` are not part of the workflow and should be rejected in code review.
 
 **Recommended workflow:**
+
 1. Create a feature or bugfix branch from `development`
 2. Work and test locally, using `npm run test` and `npm run lint`
 3. Open a Pull Request to merge into `development`
@@ -142,9 +143,11 @@ ALWAYS run through these complete user scenarios after making changes:
 **⭐ MOST IMPORTANT**: `npm run test` is your primary development tool. Use it frequently during development!
 
 - **Run tests in watch mode** (recommended for active development):
+
   ```bash
   npm run test
   ```
+
   - Runs Vitest test suite in watch mode
   - Takes ~1.4 seconds
   - 16 tests covering ride service functionality
@@ -152,17 +155,21 @@ ALWAYS run through these complete user scenarios after making changes:
   - **Use this constantly while developing**
 
 - **Run tests once**:
+
   ```bash
   npm run test:run
   ```
+
   - Runs Vitest test suite once (non-watch mode)
   - Takes ~1.4 seconds
   - Use before commits and in CI
 
 - **Run tests with UI**:
+
   ```bash
   npm run test:ui
   ```
+
   - Opens Vitest UI in browser for interactive testing
   - Great for debugging failing tests and exploring coverage
 
@@ -171,23 +178,29 @@ ALWAYS run through these complete user scenarios after making changes:
 ### Code Quality and Linting
 
 - **Run ESLint**:
+
   ```bash
   npm run lint
   ```
+
   - Takes ~1.6 seconds
   - Checks all .js, .vue, and .mjs files
   - Currently finds 5 errors and 1 warning that need fixing
 
 - **Auto-fix ESLint issues**:
+
   ```bash
   npm run lint:fix
   ```
+
   - Automatically fixes ESLint issues where possible
 
 - **Format code with Prettier**:
+
   ```bash
   npm run format
   ```
+
   - Takes ~8 seconds
   - Formats all files according to .prettierrc configuration
 
@@ -301,6 +314,7 @@ supabase/
 ### Understanding Project Tools
 
 **Essential Tools Overview**:
+
 - **Vitest**: Testing framework (`npm run test`) - your primary development tool
 - **ESLint**: Code linting (`npm run lint`) - catches errors and enforces code style
 - **Prettier**: Code formatting (`npm run format`) - consistent code style
@@ -331,7 +345,7 @@ supabase/
 - Uses Vuetify theming system (configured in `src/main.js`)
 - Custom CSS in `src/style.css`
 - Material Design Icons available via `@mdi/font`
-- **Development workflow**: 
+- **Development workflow**:
   1. Use `npm run dev` for hot reload while styling
   2. Keep `npm run test` running to catch any regressions
   3. Run `npm run lint` to validate CSS and component structure

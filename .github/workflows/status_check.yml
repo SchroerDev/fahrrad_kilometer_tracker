@@ -2,9 +2,9 @@ name: Status Checks
 
 on:
   push:
-    branches: [ main, development ]
+    branches: [main, development]
   pull_request:
-    branches: [ main, development ]
+    branches: [main, development]
 
 jobs:
   lint:

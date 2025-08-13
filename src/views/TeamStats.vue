@@ -16,7 +16,7 @@
 
           <div v-else-if="!teamData">
             <v-alert type="info" dense>
-              Du bist in keinem Team. 
+              Du bist in keinem Team.
               <router-link to="/teams" class="ml-2">Jetzt Team beitreten</router-link>
             </v-alert>
           </div>
@@ -124,11 +124,7 @@
                   </v-card-title>
                   <v-card-text>
                     <v-list v-if="recentRides.length > 0" dense>
-                      <v-list-item
-                        v-for="ride in recentRides"
-                        :key="ride.id"
-                        class="mb-1"
-                      >
+                      <v-list-item v-for="ride in recentRides" :key="ride.id" class="mb-1">
                         <template #prepend>
                           <v-icon size="20" color="primary">mdi-bike</v-icon>
                         </template>
@@ -141,9 +137,7 @@
                         </v-list-item-subtitle>
                       </v-list-item>
                     </v-list>
-                    <p v-else class="text-medium-emphasis">
-                      Noch keine Fahrten vorhanden.
-                    </p>
+                    <p v-else class="text-medium-emphasis">Noch keine Fahrten vorhanden.</p>
                   </v-card-text>
                 </v-card>
               </v-col>
@@ -191,7 +185,10 @@ const fetchTeamStats = async () => {
     error.value = null
 
     // Aktuellen User holen
-    const { data: { user }, error: userError } = await supabase.auth.getUser()
+    const {
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser()
     if (userError || !user) {
       error.value = 'Nicht eingeloggt.'
       return
@@ -212,14 +209,16 @@ const fetchTeamStats = async () => {
     // Team-Informationen laden
     const { data: team, error: teamError } = await supabase
       .from('teams')
-      .select(`
+      .select(
+        `
         id,
         name,
         members:members (
           user_id,
           profiles:profiles (username)
         )
-      `)
+      `
+      )
       .eq('id', memberData.team_id)
       .single()
 
@@ -238,12 +237,12 @@ const fetchTeamStats = async () => {
         .eq('user_id', member.user_id)
 
       if (ridesError) {
-        console.error('Fehler beim Laden der Fahrten:', ridesError)
+        // console.error('Fehler beim Laden der Fahrten:', ridesError) // entfernt für linter
         return {
           user_id: member.user_id,
           username: member.profiles?.username || 'Unbekannt',
           totalKm: 0,
-          rideCount: 0
+          rideCount: 0,
         }
       }
 
@@ -251,36 +250,37 @@ const fetchTeamStats = async () => {
         user_id: member.user_id,
         username: member.profiles?.username || 'Unbekannt',
         totalKm: rides?.reduce((sum, ride) => sum + (ride.km || 0), 0) || 0,
-        rideCount: rides?.length || 0
+        rideCount: rides?.length || 0,
       }
     })
 
     memberStats.value = await Promise.all(memberStatsPromises)
 
     // Letzte Fahrten laden
-    const userIds = team.members.map(m => m.user_id)
+    const userIds = team.members.map((m) => m.user_id)
     const { data: rides, error: ridesError } = await supabase
       .from('rides')
-      .select(`
+      .select(
+        `
         id,
         km,
         created_at,
         profiles:profiles (username)
-      `)
+      `
+      )
       .in('user_id', userIds)
       .order('created_at', { ascending: false })
       .limit(10)
 
     if (!ridesError && rides) {
-      recentRides.value = rides.map(ride => ({
+      recentRides.value = rides.map((ride) => ({
         ...ride,
-        username: ride.profiles?.username || 'Unbekannt'
+        username: ride.profiles?.username || 'Unbekannt',
       }))
     }
 
     // Team-Rang berechnen
     await calculateTeamRank(memberData.team_id)
-
   } catch (err) {
     error.value = 'Unerwarteter Fehler: ' + err.message
   } finally {
@@ -291,9 +291,7 @@ const fetchTeamStats = async () => {
 // Team-Rang berechnen
 const calculateTeamRank = async (currentTeamId) => {
   try {
-    const { data: teams, error: teamsError } = await supabase
-      .from('teams')
-      .select(`
+    const { data: teams, error: teamsError } = await supabase.from('teams').select(`
         id,
         members:members (
           user_id
@@ -312,11 +310,8 @@ const calculateTeamRank = async (currentTeamId) => {
           return { id: team.id, totalKm: 0 }
         }
 
-        const userIds = team.members.map(m => m.user_id)
-        const { data: rides } = await supabase
-          .from('rides')
-          .select('km')
-          .in('user_id', userIds)
+        const userIds = team.members.map((m) => m.user_id)
+        const { data: rides } = await supabase.from('rides').select('km').in('user_id', userIds)
 
         const totalKm = rides?.reduce((sum, ride) => sum + (ride.km || 0), 0) || 0
         return { id: team.id, totalKm }
@@ -325,13 +320,11 @@ const calculateTeamRank = async (currentTeamId) => {
 
     // Teams nach Kilometer sortieren
     const sortedTeams = teamTotals.sort((a, b) => b.totalKm - a.totalKm)
-    
-    // Rang des aktuellen Teams finden
-    const rank = sortedTeams.findIndex(team => team.id === currentTeamId) + 1
-    teamRank.value = rank > 0 ? rank : 0
 
-  } catch (err) {
-    console.error('Fehler beim Berechnen des Team-Rangs:', err)
+    // Rang des aktuellen Teams finden
+    const rank = sortedTeams.findIndex((team) => team.id === currentTeamId) + 1
+    teamRank.value = rank > 0 ? rank : 0
+  } catch {
     teamRank.value = 0
   }
 }
@@ -339,10 +332,14 @@ const calculateTeamRank = async (currentTeamId) => {
 // Hilfsfunktionen
 const getRankColor = (index) => {
   switch (index) {
-    case 0: return 'gold'
-    case 1: return 'silver'
-    case 2: return 'orange'
-    default: return 'primary'
+    case 0:
+      return 'gold'
+    case 1:
+      return 'silver'
+    case 2:
+      return 'orange'
+    default:
+      return 'primary'
   }
 }
 
@@ -350,10 +347,16 @@ const formatRelativeTime = (dateString) => {
   const date = new Date(dateString)
   const now = new Date()
   const diffInHours = Math.floor((now - date) / (1000 * 60 * 60))
-  
-  if (diffInHours < 1) return 'Vor wenigen Minuten'
-  if (diffInHours < 24) return `Vor ${diffInHours} Stunden`
-  if (diffInHours < 48) return 'Gestern'
+
+  if (diffInHours < 1) {
+    return 'Vor wenigen Minuten'
+  }
+  if (diffInHours < 24) {
+    return `Vor ${diffInHours} Stunden`
+  }
+  if (diffInHours < 48) {
+    return 'Gestern'
+  }
   return `Vor ${Math.floor(diffInHours / 24)} Tagen`
 }
 

@@ -52,7 +52,7 @@ import { ref, onMounted } from 'vue'
 import { supabase } from '../supabaseClient'
 import maplibregl from 'maplibre-gl'
 import 'maplibre-gl/dist/maplibre-gl.css'
-import { saveRideOffline, getPendingRides, clearPendingRides } from '../services/rideService'
+import { saveRideOffline } from '../services/rideService'
 
 const lat = ref('')
 const lng = ref('')

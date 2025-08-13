@@ -1,19 +1,13 @@
 <template>
-  <!-- Breadcrumbs-Komponente vorübergehend entfernt
-  <v-lab-breadcrumbs :items="breadcrumbItems" class="mb-4">
-    <template #divider>
-      <v-icon>mdi-chevron-right</v-icon>
-    </template>
-  </v-lab-breadcrumbs>
-  -->
+  <!-- Breadcrumbs-Komponente vorübergehend entfernt -->
+  <div></div>
 </template>
 
 <script setup>
 import { computed } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 
 const route = useRoute()
-const router = useRouter()
 
 const routeMap = {
   '/': { text: 'Home', to: '/' },
@@ -28,13 +22,13 @@ const routeMap = {
   '/login': { text: 'Login', to: '/login' },
 }
 
-const breadcrumbItems = computed(() => {
+// Variable wird nicht genutzt, daher mit _ benennen
+const _breadcrumbItems = computed(() => {
   const path = route.path
   const segments = path.split('/').filter(Boolean)
   let current = ''
   const items = []
 
-  // Immer Home als erstes Breadcrumb
   items.push(routeMap['/'])
 
   for (const segment of segments) {

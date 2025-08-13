@@ -124,7 +124,7 @@ function formatDate(dateString) {
   return new Date(dateString).toLocaleDateString('de-DE', options)
 }
 
-function editRide(ride) {
+function editRide(_ride) {
   // Logik zum Bearbeiten der Fahrt
 }
 

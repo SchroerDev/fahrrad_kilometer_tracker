@@ -3,7 +3,8 @@
     <NavBar />
     <router-view />
     <v-banner v-if="!isOnline" color="warning" icon="mdi-wifi-off">
-      Du bist offline. Neue Fahrten werden gespeichert und synchronisiert, sobald du wieder online bist.
+      Du bist offline. Neue Fahrten werden gespeichert und synchronisiert, sobald du wieder online
+      bist.
     </v-banner>
   </v-app>
 </template>
