@@ -84,3 +84,17 @@ export async function createRide({ lat, lng, km }, userId) {
 
   return { success: true }
 }
+
+export function saveRideOffline(ride) {
+  const pending = JSON.parse(localStorage.getItem('pendingRides') || '[]')
+  pending.push(ride)
+  localStorage.setItem('pendingRides', JSON.stringify(pending))
+}
+
+export function getPendingRides() {
+  return JSON.parse(localStorage.getItem('pendingRides') || '[]')
+}
+
+export function clearPendingRides() {
+  localStorage.removeItem('pendingRides')
+}

@@ -52,6 +52,7 @@ import { ref, onMounted } from 'vue'
 import { supabase } from '../supabaseClient'
 import maplibregl from 'maplibre-gl'
 import 'maplibre-gl/dist/maplibre-gl.css'
+import { saveRideOffline, getPendingRides, clearPendingRides } from '../services/rideService'
 
 const lat = ref('')
 const lng = ref('')
@@ -120,24 +121,33 @@ const submitRide = async () => {
     return
   }
   const startPoint = `SRID=4326;POINT(${lng.value} ${lat.value})`
-  const { error: insertError } = await supabase.from('rides').insert([
-    {
-      user_id: user.id,
-      km: parseInt(km.value, 10),
-      StartPoint: startPoint,
-    },
-  ])
-  if (insertError) {
-    error.value = insertError.message
-  } else {
-    success.value = true
-    lat.value = ''
-    lng.value = ''
-    km.value = ''
-    if (marker) {
-      marker.remove()
-      marker = null
+  const ride = {
+    user_id: user.id,
+    km: parseInt(km.value, 10),
+    StartPoint: startPoint,
+  }
+  if (navigator.onLine) {
+    // Versuche direkt zu speichern
+    const { error: insertError } = await supabase.from('rides').insert(ride)
+    if (insertError) {
+      error.value = insertError.message
+    } else {
+      success.value = true
+      resetForm()
     }
+  } else {
+    // Offline: lokal speichern
+    saveRideOffline(ride)
+  }
+}
+
+const resetForm = () => {
+  lat.value = ''
+  lng.value = ''
+  km.value = ''
+  if (marker) {
+    marker.remove()
+    marker = null
   }
 }
 </script>

@@ -31,6 +31,25 @@
             </v-list>
 
             <v-btn color="primary" class="mt-4" @click="goToInvite">Mitglied einladen</v-btn>
+
+            <v-expansion-panels class="mt-4">
+              <v-expansion-panel title="Letzte Fahrten">
+                <v-list>
+                  <v-list-item v-for="ride in recentRides" :key="ride.id">
+                    <template #prepend>
+                      <v-icon>mdi-bike</v-icon>
+                    </template>
+                    <v-list-item-title>{{ ride.km }} km</v-list-item-title>
+                    <v-list-item-subtitle>{{ formatDate(ride.created_at) }}</v-list-item-subtitle>
+                    <template #append>
+                      <v-btn icon size="small" @click="editRide(ride)">
+                        <v-icon>mdi-pencil</v-icon>
+                      </v-btn>
+                    </template>
+                  </v-list-item>
+                </v-list>
+              </v-expansion-panel>
+            </v-expansion-panels>
           </div>
         </v-card-text>
       </v-card>
@@ -48,6 +67,7 @@ const loading = ref(true)
 const team = ref(null)
 const members = ref([])
 const memberListError = ref('')
+const recentRides = ref([])
 
 async function fetchMyTeam() {
   loading.value = true
@@ -97,6 +117,15 @@ function goToTeams() {
 
 function goToInvite() {
   router.push('/invite-member')
+}
+
+function formatDate(dateString) {
+  const options = { year: 'numeric', month: 'numeric', day: 'numeric' }
+  return new Date(dateString).toLocaleDateString('de-DE', options)
+}
+
+function editRide(ride) {
+  // Logik zum Bearbeiten der Fahrt
 }
 
 onMounted(fetchMyTeam)

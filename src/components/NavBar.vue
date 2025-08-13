@@ -19,6 +19,9 @@
           <v-list-item @click="navigateTo('/rides/new')">
             <v-list-item-title>Fahrt eintragen</v-list-item-title>
           </v-list-item>
+          <v-list-item @click="navigateTo('/team-stats')">
+            <v-list-item-title>Statistiken</v-list-item-title>
+          </v-list-item>
           <v-list-item @click="navigateTo('/profile')">
             <v-list-item-title>Profil</v-list-item-title>
           </v-list-item>
