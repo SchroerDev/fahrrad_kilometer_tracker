@@ -39,6 +39,7 @@ Es zeigt, wie man Auth, Datenbank, Policies und Edge Functions in einer Vue-App 
    - `.env` Datei von `.env.example` kopieren
    - Supabase URL und anon Schlüssel eintragen
 4. **Entwicklungsserver starten**
+
    ```sh
    npm run dev
    ```
@@ -65,12 +66,14 @@ npm run format
 ```
 
 **ESLint Konfiguration:**
+
 - Vue 3 Composition API Unterstützung
 - Moderne JavaScript Standards (ES2022+)
 - Vue-spezifische Regeln (eslint-plugin-vue)
 - Prettier Integration für Formatierung
 
 **Beispiel ESLint-Ausgabe:**
+
 ```
 /src/views/TeamsPage.vue
   21:29  error  'v-slot' directive doesn't support any modifier  vue/valid-v-slot
@@ -86,11 +89,13 @@ npm run format
 ## Produktion
 
 - **Build erstellen**
+
   ```sh
   npm run build
   ```
 
   - Der statische Code befindet sich im `docs` Verzeichnis (für GitHub Pages optimiert)
+
 - **Automatische Build Pipeline**
   - Bei Push auf den `main` Branch wird automatisch `npm run build` ausgeführt
   - Die Build-Ergebnisse werden automatisch in das `docs` Verzeichnis committed
@@ -141,3 +146,30 @@ MIT Lizenz. Siehe Datei [LICENSE](LICENSE) für Details.
 
 **Hinweis:** Dies ist ein fiktives Projekt für Demonstrationszwecke.  
 Die beschriebenen Funktionen und Technologien dienen nur zur Veranschaulichung.
+
+## Branch-Struktur und Workflow
+
+Das Projekt verwendet einen **zweistufigen Branch-Workflow**:
+
+- **development**:  
+  Der Standard-Branch für aktive Entwicklung.  
+  Alle neuen Features, Bugfixes und Änderungen werden hier entwickelt und getestet.
+
+- **main**:  
+  Der geschützte Produktions-Branch.  
+  Änderungen gelangen ausschließlich über Pull Requests von `development` nach `main` in diesen Branch.  
+  Direkte Commits, Force-Pushes und das Löschen des Branches sind nicht erlaubt.  
+  Vor dem Mergen müssen alle Status Checks (Build, Tests, Linting) erfolgreich sein und mindestens ein Review erfolgt sein.
+
+**Wichtige Hinweise:**
+
+- Pull Requests von `main` nach `development` sind nicht vorgesehen und werden im Review abgelehnt.
+- Der `main`-Branch ist immer stabil und entspricht dem Stand der produktiven Anwendung.
+- Der Deployment-Workflow baut automatisch aus dem `main`-Branch und deployed auf GitHub Pages.
+
+**Empfohlener Workflow:**
+
+1. Feature- oder Bugfix-Branch von `development` abzweigen
+2. Nach Fertigstellung Pull Request nach `development`
+3. Nach erfolgreichem Test und Review: Merge in `development`
+4. Für ein Release: Pull Request von `development` nach `main` erstellen und nach erfolgreichem Review mergen

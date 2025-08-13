@@ -81,6 +81,31 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
+
+      <v-row>
+        <v-col cols="12" md="6">
+          <v-card title="Meine Statistiken">
+            <v-card-text>
+              <v-list>
+                <v-list-item>
+                  <template #prepend><v-icon>mdi-bike</v-icon></template>
+                  <v-list-item-title>Fahrten insgesamt</v-list-item-title>
+                  <v-list-item-subtitle>{{ userStats.totalRides }}</v-list-item-subtitle>
+                </v-list-item>
+                <v-list-item>
+                  <template #prepend><v-icon>mdi-map-marker-distance</v-icon></template>
+                  <v-list-item-title>Kilometer gesamt</v-list-item-title>
+                  <v-list-item-subtitle>{{ userStats.totalKm }} km</v-list-item-subtitle>
+                </v-list-item>
+                <v-list-item>
+                  <v-list-item-title>Mein Titel</v-list-item-title>
+                  <v-list-item-subtitle>Mein Untertitel</v-list-item-subtitle>
+                </v-list-item>
+              </v-list>
+            </v-card-text>
+          </v-card>
+        </v-col>
+      </v-row>
     </v-container>
   </v-main>
 </template>
@@ -100,6 +125,7 @@ const editUsername = ref('')
 const usernameError = ref('')
 const usernameSuccess = ref('')
 const deleteDialog = ref(false)
+const userStats = ref({ totalRides: 0, totalKm: 0 }) // Hinzugefügt für Benutzerdaten
 
 // Nach Laden des Profils Username ins Eingabefeld übernehmen
 const fetchProfile = async () => {
@@ -161,6 +187,18 @@ const fetchProfile = async () => {
     .order('created_at', { ascending: false })
 
   rides.value = ridesData || []
+
+  // Benutzerstatistiken laden
+  const { data: statsData } = await supabase
+    .from('rides')
+    .select('count(id) as totalRides, sum(km) as totalKm')
+    .eq('user_id', user.id)
+    .single()
+
+  userStats.value = {
+    totalRides: statsData?.totalRides || 0,
+    totalKm: statsData?.totalKm || 0,
+  }
 }
 
 async function leaveTeam() {
