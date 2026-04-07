@@ -8,6 +8,8 @@ import ProfilePage from '../views/ProfilePage.vue'
 import NewRidePage from '../views/NewRidePage.vue'
 import MyTeamPage from '../views/MyTeamPage.vue'
 import TeamStats from '../views/TeamStats.vue' // Hinzugefügt
+import ImpressumPage from '../views/ImpressumPage.vue'
+import DatenschutzPage from '../views/DatenschutzPage.vue'
 
 import { supabase } from '../supabaseClient'
 
@@ -15,6 +17,8 @@ const routes = [
   { path: '/', component: HomePage },
   { path: '/login', component: LoginPage },
   { path: '/register', component: RegisterPage },
+  { path: '/impressum', component: ImpressumPage },
+  { path: '/datenschutz', component: DatenschutzPage },
   { path: '/teams', component: TeamsPage },
   { path: '/create-team', component: CreateTeamPage },
   { path: '/profile', component: ProfilePage },

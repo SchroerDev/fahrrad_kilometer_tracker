@@ -25,6 +25,14 @@
           <v-list-item @click="navigateTo('/profile')">
             <v-list-item-title>Profil</v-list-item-title>
           </v-list-item>
+
+          <v-divider class="my-2" />
+          <v-list-item @click="navigateTo('/impressum')">
+            <v-list-item-title>Impressum</v-list-item-title>
+          </v-list-item>
+          <v-list-item @click="navigateTo('/datenschutz')">
+            <v-list-item-title>Datenschutz</v-list-item-title>
+          </v-list-item>
         </v-list>
       </v-menu>
 

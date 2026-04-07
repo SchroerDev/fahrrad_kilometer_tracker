@@ -47,6 +47,12 @@
                 Noch kein Konto?
                 <router-link to="/register">Hier registrieren</router-link>
               </div>
+
+              <div class="mt-4 text-center text-body-2">
+                <router-link to="/impressum">Impressum</router-link>
+                ·
+                <router-link to="/datenschutz">Datenschutz</router-link>
+              </div>
             </v-card-text>
           </v-card>
         </v-col>
